@@ -360,7 +360,7 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
 }
 .footer-inner {
   display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 1rem; padding: 1.5rem 1rem;
+  flex-wrap: wrap; gap: 1rem; padding: 1.2rem 1rem;
 }
 .footer-inner p { color: var(--text-dim); margin: 0; }
 .footer-top { color: var(--accent) !important; text-transform: none; font-weight: 600; }
