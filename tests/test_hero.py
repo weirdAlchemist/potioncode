@@ -126,5 +126,33 @@ def test_mini_cards_share_one_width(page: Page, live_server: str):
     assert max(all_widths) - min(all_widths) <= 2, per_col
 
 
+def test_musing_visible_in_stacked_view(page: Page, live_server: str):
+    """Narrow/stacked layout: the musing opens below the sticky navbar and stays
+    on-screen — no scrolling up required to see it."""
+    page.set_viewport_size({"width": 390, "height": 700})
+    _open(page, live_server)
+
+    # Confirm we're actually stacked: the columns sit below the flask, not beside it.
+    flask = page.locator(".flask-stage").bounding_box()
+    left = page.locator(".skill-col--left").bounding_box()
+    assert left["y"] > flask["y"] + 100, "expected the stacked (single-column) layout"
+
+    # Playwright scrolls the (lower) card into view before clicking — so an
+    # absolute box anchored to the top of the page would end up off-screen.
+    page.get_by_role("button", name="8y Fullstack Dev").click()
+    expect(page.locator("#musing")).to_have_class(re.compile(r"\bis-open\b"))
+
+    # Pinned to the viewport, so scrolling can't push it off the top of the page.
+    assert page.eval_on_selector("#musing", "e => getComputedStyle(e).position") == "fixed"
+
+    nav = page.locator("nav").bounding_box()
+    card = page.locator(".musing__card").bounding_box()
+    viewport_h = page.evaluate("() => window.innerHeight")
+    # Below the navbar...
+    assert card["y"] >= nav["y"] + nav["height"] - 1, ("overlaps navbar", card, nav)
+    # ...and fully within the viewport.
+    assert 0 <= card["y"] and card["y"] + card["height"] <= viewport_h, ("off-screen", card, viewport_h)
+
+
 def _rounded(box):
     return {k: round(v) for k, v in box.items()}

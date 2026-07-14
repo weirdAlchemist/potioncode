@@ -282,7 +282,13 @@ main { position: relative; }
 @media (max-width: 900px) {
   .hero-stage { grid-template-columns: 1fr; justify-items: center; gap: 2.5rem; min-height: auto; padding: 1rem 0 2rem; }
   .flask-hero { order: -1; }
-  .skill-col--left, .skill-col--right { align-items: center; text-align: center; }
+  /* Stacked layout: center the columns instead of keeping their desktop
+     justify-self (end/start), which would pin Testing right and Development left. */
+  .skill-col--left, .skill-col--right { align-items: center; text-align: center; justify-self: center; }
+  /* Anchor the musing to the viewport (not the top of main): the stacked page
+     is tall, so an absolute box would open off-screen above the scroll.
+     top: 65px clears the sticky navbar so the box sits below it. */
+  .musing { position: fixed; top: 65px; }
 }
 
 .hero-name-sm { display: block; font-size: 1.4rem; font-weight: 700; color: var(--text); }
