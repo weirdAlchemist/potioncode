@@ -258,7 +258,9 @@ main { position: relative; }
 .flask-stage .flask { transform: scale(3); z-index: 1; }
 
 /* GitHub / LinkedIn logo buttons */
-.hero-socials { display: flex; gap: 1.1rem; justify-content: center; }
+/* Pull the icons up to sit directly under the flask (the scaled flask
+   leaves ~59px of empty space at the bottom of its fixed-height stage). */
+.hero-socials { display: flex; gap: 1.1rem; justify-content: center; margin-top: -5rem; }
 .icon-link {
   width: 50px; height: 50px; border-radius: 50%;
   display: grid; place-items: center;
@@ -398,11 +400,10 @@ main { position: relative; }
   padding: 0;
 }
 .footer-inner {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; justify-content: center; align-items: center;
   flex-wrap: wrap; gap: 1rem; padding: 1.2rem 1rem;
 }
 .footer-inner p { color: var(--text-dim); margin: 0; }
-.footer-top { color: var(--accent) !important; text-transform: none; font-weight: 600; }
 
 /* ---------- Scroll animation helper ---------- */
 /* Elements start hidden; JS adds the animate.css classes when they scroll in. */
