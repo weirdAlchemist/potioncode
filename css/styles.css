@@ -260,7 +260,9 @@ main { position: relative; }
 /* GitHub / LinkedIn logo buttons */
 /* Pull the icons up to sit directly under the flask (the scaled flask
    leaves ~59px of empty space at the bottom of its fixed-height stage). */
-.hero-socials { display: flex; gap: 1.1rem; justify-content: center; margin-top: -5rem; }
+/* position/z-index so the icons sit above the flask-stage box they now
+   overlap (via the negative margin), keeping them clickable. */
+.hero-socials { display: flex; gap: 1.1rem; justify-content: center; margin-top: -5rem; position: relative; z-index: 2; }
 .icon-link {
   width: 50px; height: 50px; border-radius: 50%;
   display: grid; place-items: center;
