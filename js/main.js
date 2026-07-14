@@ -56,4 +56,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.6 });
     nums.forEach((n) => io.observe(n));
   }
+
+  // --- Skill-card musings: reveal a panel above the hero, pushing it down ---
+  const musing = document.getElementById('musing');
+  if (musing) {
+    const titleEl = musing.querySelector('.musing__title');
+    const bodyEl = musing.querySelector('.musing__body');
+    const cards = document.querySelectorAll('.mini-card.is-interactive');
+
+    const openMusing = (card) => {
+      const note = card.querySelector('.mini-card__note');
+      if (!note) return;
+      const label = card.querySelector('.mini-card__label');
+      titleEl.textContent = label ? label.textContent : '';
+      bodyEl.innerHTML = note.innerHTML;
+      musing.classList.add('is-open');
+      cards.forEach((c) => c.classList.toggle('is-active', c === card));
+    };
+    const closeMusing = () => {
+      musing.classList.remove('is-open');
+      cards.forEach((c) => c.classList.remove('is-active'));
+    };
+
+    cards.forEach((card) => {
+      // stopPropagation so this same click doesn't immediately trigger the
+      // document-level "click anywhere to close" handler below.
+      card.addEventListener('click', (e) => { e.stopPropagation(); openMusing(card); });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); openMusing(card); }
+      });
+    });
+
+    // Clicking anywhere hides it again and lets the hero move back up.
+    document.addEventListener('click', () => {
+      if (musing.classList.contains('is-open')) closeMusing();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMusing();
+    });
+  }
 });

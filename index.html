@@ -36,6 +36,15 @@
   </nav>
 
   <main>
+    <!-- Musing panel: revealed above the hero when a skill card is clicked,
+         pushing the hero down. Populated by js/main.js; click anywhere to hide. -->
+    <div class="musing" id="musing" aria-live="polite">
+      <div class="musing__card">
+        <h3 class="musing__title"></h3>
+        <div class="musing__body"></div>
+      </div>
+    </div>
+
     <!-- ===================== HERO / BUSINESS CARD ===================== -->
     <header class="hero">
       <div class="container">
@@ -43,7 +52,11 @@
           <!-- Tester (left) -->
           <div class="skill-col skill-col--left will-animate" data-anim="animate__fadeInLeft">
             <h2 class="col-title">Tester</h2>
-            <div class="mini-card">4y Test Automation</div>
+            <div class="mini-card is-interactive" role="button" tabindex="0">
+              <span class="mini-card__label">4y Test Automation</span>
+              <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
+              <p class="mini-card__note" hidden>4 years of test automation, test environment handling, and general senior developer things. What I learned is how hard it is to get a <em>stable</em> test suite running — and what a feeling of accomplishment it gives when such a suite finds issues.</p>
+            </div>
             <div class="mini-card">Selenium &amp; Playwright</div>
             <div class="mini-card">Telerik WPF</div>
             <div class="mini-card">Test Environments</div>
@@ -86,7 +99,11 @@
           <!-- Developer (right) -->
           <div class="skill-col skill-col--right will-animate" data-anim="animate__fadeInRight">
             <h2 class="col-title">Developer</h2>
-            <div class="mini-card">8y Fullstack Dev</div>
+            <div class="mini-card is-interactive" role="button" tabindex="0">
+              <span class="mini-card__label">8y Fullstack Dev</span>
+              <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
+              <p class="mini-card__note" hidden>8 years of fullstack web development on an asset management software taught me the value of "keep it simple".</p>
+            </div>
             <div class="mini-card">C# & Python at work</div>
             <div class="mini-card">Flutter/Dart on mobile</div>
             <div class="mini-card">Godot for games</div>

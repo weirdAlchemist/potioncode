@@ -186,9 +186,11 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
   gap: clamp(1rem, 4vw, 3.5rem);
   min-height: 72vh;
 }
-.skill-col { display: flex; flex-direction: column; gap: 1rem; }
-.skill-col--left  { align-items: flex-end;   text-align: right; }
-.skill-col--right { align-items: flex-start; text-align: left; }
+/* width: max-content shrink-wraps each column to its widest card;
+   align-items: stretch then sizes every card in the column to that width. */
+.skill-col { display: flex; flex-direction: column; gap: 1rem; width: max-content; }
+.skill-col--left  { align-items: stretch; justify-self: end;   text-align: right; }
+.skill-col--right { align-items: stretch; justify-self: start; text-align: left; }
 .col-title {
   font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; margin: 0 0 .3rem;
   background: var(--accent-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -203,6 +205,43 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
   transform: translateY(-3px); border-color: var(--accent);
   box-shadow: 0 12px 26px -16px var(--accent);
 }
+/* Cards that reveal a musing on click — signalled at rest (not just on hover) */
+.mini-card.is-interactive {
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: .3rem;
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  box-shadow: 0 0 18px -6px rgba(167, 139, 250, .4);
+}
+.mini-card.is-interactive:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.mini-card__chevron {
+  font-size: 1.2rem; color: var(--accent);
+  transition: transform .3s var(--ease);
+}
+.mini-card.is-active .mini-card__chevron { transform: rotate(180deg); }
+.mini-card__note { display: none; }
+
+/* ---------- Musing panel (floating overlay above the hero) ---------- */
+/* Out of flow so the flask and mini-cards never move; just floats on top. */
+main { position: relative; }
+.musing {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 2000;
+  opacity: 0; transform: translateY(-8px); pointer-events: none;
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+}
+.musing.is-open { opacity: 1; transform: none; pointer-events: auto; }
+.musing__card {
+  max-width: 640px; margin: 2rem auto 0; padding: 1.6rem 1.8rem;
+  background: var(--bg-card); border: 1px solid var(--accent); border-radius: 16px;
+  /* same purple glow as a hovered mini-card, over the existing depth shadow */
+  box-shadow: 0 12px 26px -16px var(--accent), 0 20px 50px -24px rgba(0, 0, 0, .6);
+  text-align: center;
+}
+.musing__title {
+  margin: 0 0 .7rem; font-size: 1.35rem; font-weight: 800;
+  background: var(--accent-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.musing__body { color: var(--text-dim); line-height: 1.7; }
+.musing__body em { color: var(--accent-2); font-style: italic; }
 
 /* Big central flask */
 .flask-hero { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
@@ -237,7 +276,7 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
 @media (max-width: 900px) {
   .hero-stage { grid-template-columns: 1fr; justify-items: center; gap: 2.5rem; min-height: auto; padding: 1rem 0 2rem; }
   .flask-hero { order: -1; }
-  .skill-col--left, .skill-col--right { align-items: center; text-align: center; }
+  .skill-col--left, .skill-col--right { align-items: stretch; text-align: center; }
 }
 
 .hero-name-sm { display: block; font-size: 1.4rem; font-weight: 700; color: var(--text); }
