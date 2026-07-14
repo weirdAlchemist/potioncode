@@ -38,6 +38,8 @@ assets/               resume.pdf and images go here
 .claude/launch.json   `python -m http.server 4173` for local preview
 ```
 
+**Treat README.md as locked.** Do not add or change content of this file.
+
 ## Tech / conventions
 
 - **Materialize CSS 1.0.0** (Material Design components) + **Animate.css 4.1.1**
