@@ -1,0 +1,6 @@
+# Python test tooling (dev-only; not part of the shipped site)
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+test-results/

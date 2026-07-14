@@ -69,3 +69,26 @@ Serve over HTTP (local fonts/JS won't load from `file://`):
 ```
 python -m http.server 4173     # then visit http://localhost:4173
 ```
+
+## Tests
+
+Browser-driven regression tests live in `tests/` — **Playwright for Python** +
+pytest. They serve the site with a throwaway `http.server` and drive it in a
+real headless browser. **Dev-only tooling** — nothing under `tests/` is served
+with the site, so the shipped page stays no-build / no-CDN / offline.
+
+```
+pip install -r tests/requirements.txt   # (in a venv)
+playwright install chromium
+pytest tests
+```
+
+Why a real browser and not unit tests: the suite was born from a bug where the
+social icons rendered perfectly but weren't *clickable* (a sibling painted on
+top and ate the pointer events). Unit / jsdom tests can't see that — only real
+layout + hit-testing catches it. Each icon is checked with
+`locator.click(trial=True)`, which runs the full actionability/hit-test without
+navigating and fails if anything covers the element. See `tests/README.md` for
+the details (including the animation/font/`:hover` gotchas the tests guard
+against). Keep these green when touching the hero, and note the flask-lock rule
+still applies to the flask itself.

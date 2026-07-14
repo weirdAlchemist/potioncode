@@ -1,0 +1,10 @@
+# Dev-only test dependencies. These are NOT served with the site — the shipped
+# page stays no-build / no-CDN / offline. Install into a venv, then fetch the
+# browser binary:
+#
+#   python -m venv .venv && .venv\Scripts\activate   (Windows)
+#   pip install -r tests/requirements.txt
+#   playwright install chromium
+#
+# pytest-playwright pulls in playwright + pytest and provides the `page` fixture.
+pytest-playwright>=0.5.0
