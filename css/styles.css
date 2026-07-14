@@ -186,11 +186,13 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
   gap: clamp(1rem, 4vw, 3.5rem);
   min-height: 72vh;
 }
-/* width: max-content shrink-wraps each column to its widest card;
-   align-items: stretch then sizes every card in the column to that width. */
-.skill-col { display: flex; flex-direction: column; gap: 1rem; width: max-content; }
-.skill-col--left  { align-items: stretch; justify-self: end;   text-align: right; }
-.skill-col--right { align-items: stretch; justify-self: start; text-align: left; }
+.skill-col { display: flex; flex-direction: column; gap: 1rem; }
+.skill-col--left  { align-items: flex-end;   justify-self: end;   text-align: right; }
+.skill-col--right { align-items: flex-start; justify-self: start; text-align: left; }
+/* Only the cards drive their own width (not the title): width: max-content
+   shrink-wraps to the widest card, then align-items: stretch sizes them all
+   to match. Keeps the two columns' cards equal even if a title is wider. */
+.skill-cards { display: flex; flex-direction: column; gap: 1rem; width: max-content; align-items: stretch; }
 .col-title {
   font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; margin: 0 0 .3rem;
   background: var(--accent-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -280,7 +282,7 @@ main { position: relative; }
 @media (max-width: 900px) {
   .hero-stage { grid-template-columns: 1fr; justify-items: center; gap: 2.5rem; min-height: auto; padding: 1rem 0 2rem; }
   .flask-hero { order: -1; }
-  .skill-col--left, .skill-col--right { align-items: stretch; text-align: center; }
+  .skill-col--left, .skill-col--right { align-items: center; text-align: center; }
 }
 
 .hero-name-sm { display: block; font-size: 1.4rem; font-weight: 700; color: var(--text); }
