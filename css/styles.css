@@ -24,6 +24,11 @@ body {
   color: var(--text);
   transition: background .4s var(--ease), color .4s var(--ease);
   overflow-x: hidden;
+  /* Sticky footer: full-height flex column so main grows and pins the footer
+     to the bottom even when the content is shorter than the viewport. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 /* Ambient background glow */
 body::before {
@@ -34,6 +39,7 @@ body::before {
     radial-gradient(50vw 50vw at -10% 15%, rgba(52,211,153,.14), transparent 60%);
 }
 main, .page-footer { position: relative; z-index: 1; }
+main { flex: 1 0 auto; }   /* grow to fill, pushing the footer to the bottom */
 
 .accent { color: var(--accent); }
 h1,h2,h3,h4,h5 { font-weight: 700; }
@@ -70,7 +76,7 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
 .nav-glass ul a:hover { color: var(--text); background: transparent; }
 
 /* ---------- Hero ---------- */
-.hero { padding: clamp(2.5rem, 7vw, 5rem) 0 1rem; }
+.hero { padding: clamp(1.25rem, 4vw, 3rem) 0 1.5rem; }
 .hero__row { min-height: 60vh; }
 .hero-eyebrow { color: var(--text-dim); font-size: 1.1rem; margin: 0; }
 .hero-name {
@@ -184,8 +190,12 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: clamp(1rem, 4vw, 3.5rem);
-  min-height: 72vh;
+  min-height: 46vh;
 }
+/* Personal group below the hero stage: three cards in a row, centered. */
+.personal-group { display: flex; flex-direction: column; align-items: center; gap: 1.1rem; margin-top: 1rem; }
+.personal-cards { display: flex; gap: 1rem; justify-content: center; }
+.personal-cards .mini-card { width: 224px; }
 .skill-col { display: flex; flex-direction: column; gap: 1rem; }
 .skill-col--left  { align-items: flex-end;   justify-self: end;   text-align: right; }
 .skill-col--right { align-items: flex-start; justify-self: start; text-align: left; }
@@ -227,8 +237,10 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
 /* ---------- Musing panel (floating overlay above the hero) ---------- */
 /* Out of flow so the flask and mini-cards never move; just floats on top. */
 main { position: relative; }
+/* Fixed to the viewport, below the sticky navbar, so it stays visible no
+   matter how far the (now taller) page is scrolled when a card is clicked. */
 .musing {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 2000;
+  position: fixed; top: 65px; left: 0; right: 0; z-index: 2000;
   opacity: 0; transform: translateY(-8px); pointer-events: none;
   transition: opacity .35s var(--ease), transform .35s var(--ease);
 }
@@ -289,10 +301,8 @@ main { position: relative; }
   /* Stacked layout: center the columns instead of keeping their desktop
      justify-self (end/start), which would pin Testing right and Development left. */
   .skill-col--left, .skill-col--right { align-items: center; text-align: center; justify-self: center; }
-  /* Anchor the musing to the viewport (not the top of main): the stacked page
-     is tall, so an absolute box would open off-screen above the scroll.
-     top: 65px clears the sticky navbar so the box sits below it. */
-  .musing { position: fixed; top: 65px; }
+  /* Personal group: stack its cards vertically too, matching the other groups. */
+  .personal-cards { flex-direction: column; align-items: center; }
 }
 
 .hero-name-sm { display: block; font-size: 1.4rem; font-weight: 700; color: var(--text); }
