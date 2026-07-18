@@ -64,12 +64,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const bodyEl = musing.querySelector('.musing__body');
     const cards = document.querySelectorAll('.mini-card.is-interactive');
 
+    // A note may be split into "What I did" / "What I think" parts; render each
+    // as a labelled section. Notes without the split fall back to raw content.
+    const addSection = (heading, contentEl) => {
+      if (!contentEl) return;
+      const section = document.createElement('div');
+      section.className = 'musing__section';
+      const h = document.createElement('h4');
+      h.className = 'musing__section-title';
+      h.textContent = heading;
+      const body = document.createElement('div');
+      body.className = 'musing__section-body';
+      body.innerHTML = contentEl.innerHTML;
+      section.append(h, body);
+      bodyEl.appendChild(section);
+    };
+
     const openMusing = (card) => {
       const note = card.querySelector('.mini-card__note');
       if (!note) return;
       const label = card.querySelector('.mini-card__label');
       titleEl.textContent = label ? label.textContent : '';
-      bodyEl.innerHTML = note.innerHTML;
+      const did = note.querySelector('.mini-card__did');
+      const think = note.querySelector('.mini-card__think');
+      if (did || think) {
+        bodyEl.innerHTML = '';
+        addSection('What I did', did);
+        addSection('What I think', think);
+      } else {
+        bodyEl.innerHTML = note.innerHTML;
+      }
       musing.classList.add('is-open');
       cards.forEach((c) => c.classList.toggle('is-active', c === card));
     };

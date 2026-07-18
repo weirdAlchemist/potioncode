@@ -73,6 +73,19 @@ def test_clicking_card_opens_musing(page: Page, live_server: str):
     expect(page.locator(".musing__body")).to_contain_text("stable")
 
 
+def test_musing_has_did_and_think_sections(page: Page, live_server: str):
+    """An opened musing splits into a 'What I did' and a 'What I think' section."""
+    _open(page, live_server)
+    page.get_by_role("button", name="4y Test Automation").click()
+
+    titles = page.locator(".musing__body .musing__section-title")
+    expect(titles).to_have_count(2)
+    expect(titles.nth(0)).to_have_text("What I did")
+    expect(titles.nth(1)).to_have_text("What I think")
+    # The current text lives under "What I think".
+    expect(page.locator(".musing__section").nth(1)).to_contain_text("stable")
+
+
 def test_every_interactive_card_opens_its_musing(page: Page, live_server: str):
     """Every clickable skill card reveals a musing titled with its own label."""
     _open(page, live_server)

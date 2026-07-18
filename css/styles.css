@@ -260,6 +260,14 @@ main { position: relative; }
 .musing__body p { margin: 0 0 .8rem; }
 .musing__body p:last-child { margin-bottom: 0; }
 .musing__body em { color: var(--accent-2); font-style: italic; }
+/* Two-part musing: "What I did" then "What I think" */
+.musing__section { text-align: left; }
+.musing__section + .musing__section { margin-top: 1.3rem; }
+.musing__section-title {
+  margin: 0 0 .5rem; font-size: .78rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--accent-2);
+}
+.musing__section-body p:last-child { margin-bottom: 0; }
 
 /* Big central flask */
 .flask-hero { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
