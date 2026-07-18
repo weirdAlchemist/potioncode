@@ -47,16 +47,22 @@
 }
 
 /* ---------- Project nodes ---------- */
+/* The 5 nodes sit on a regular pentagon, radius --orbit-r (270px on tall
+   viewports). Expressed as a fraction of --orbit-r rather than fixed px so
+   it can shrink on short desktop windows — see the min-width:901px block
+   below, which caps --orbit-r by viewport height once the flask/orbit is
+   dead-centered, keeping the top node clear of the navbar. */
+:root { --orbit-r: 270px; }
 .project-node {
   position: absolute; top: 50%; left: 50%;
   width: 120px;
   outline: none;
 }
-.project-node--1 { transform: translate(-50%, -50%) translate(0px, -270px); }
-.project-node--2 { transform: translate(-50%, -50%) translate(257px, -84px); }
-.project-node--3 { transform: translate(-50%, -50%) translate(159px, 218px); }
-.project-node--4 { transform: translate(-50%, -50%) translate(-159px, 218px); }
-.project-node--5 { transform: translate(-50%, -50%) translate(-257px, -84px); }
+.project-node--1 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  0),      calc(var(--orbit-r) * -1));      }
+.project-node--2 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  0.9519), calc(var(--orbit-r) * -0.3111)); }
+.project-node--3 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  0.5889), calc(var(--orbit-r) *  0.8074)); }
+.project-node--4 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) * -0.5889), calc(var(--orbit-r) *  0.8074)); }
+.project-node--5 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) * -0.9519), calc(var(--orbit-r) * -0.3111)); }
 
 .project-node__thumb {
   aspect-ratio: 4 / 3;
@@ -105,6 +111,34 @@
 }
 .project-node:focus-visible .project-node__thumb {
   outline: 2px solid var(--accent); outline-offset: 3px;
+}
+
+/* ---------- Desktop: flask dead-center of the viewport ---------- */
+/* Mirrors the same treatment on index.html: above the mobile breakpoint the
+   orbit (and the flask at its center, via the existing absolute-centered
+   .flask-stage rule above) is pinned to the exact center of the screen
+   instead of flowing under the title. body clips to 100vh, no scrolling.
+   Below 900px the existing stacked-list fallback (below) is untouched. */
+@media (min-width: 901px) {
+  body { height: 100vh; overflow: hidden; }
+  .hero.projects-hero { padding: 0; }
+
+  /* Dead-centering the orbit on a short window would push the top node
+     under the navbar — shrink the pentagon's radius once the viewport gets
+     shorter than 900px tall (full 270px size is unaffected above that). */
+  :root { --orbit-r: min(270px, 30vh); }
+
+  .projects-title {
+    position: fixed; top: 78px; left: 50%; transform: translateX(-50%);
+    margin: 0; font-size: 1rem; line-height: 1; z-index: 5;
+    /* Decorative heading only — never let it steal hover/click from a node
+       orbiting near the top of the (now viewport-centered) circle. */
+    pointer-events: none;
+  }
+  .projects-orbit {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    margin: 0;
+  }
 }
 
 /* ---------- Responsive: stacked list instead of an orbit ---------- */

@@ -20,6 +20,7 @@
   --accent-grad: linear-gradient(135deg, #a78bfa, #34d399);
   --ease: cubic-bezier(.22, 1, .36, 1);
   --rail-w: 44px;   /* width of the page-rail prev/next carousel arrows */
+  --stage-gap: clamp(1rem, 4vw, 3.5rem);   /* gap between the flask and its flanking content */
 }
 
 /* ---------- Base ---------- */
@@ -94,7 +95,7 @@ h1,h2,h3,h4,h5 { font-weight: 700; }
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: clamp(1rem, 4vw, 3.5rem);
+  gap: var(--stage-gap);
   min-height: 46vh;
 }
 
@@ -203,6 +204,35 @@ main { position: relative; }
   /* Stacked layout: center the columns instead of keeping their desktop
      justify-self (end/start), which would pin Testing right and Development left. */
   .skill-column--left, .skill-column--right { align-items: center; text-align: center; justify-self: center; }
+}
+
+/* ---------- Desktop: flask dead-center of the viewport ---------- */
+/* Above the mobile breakpoint, the flask anchors to the exact center of the
+   screen and everything else (skill columns, social links) is positioned off
+   that same center point instead of flowing in the grid — the composition no
+   longer depends on the navbar/footer height. body is clipped to 100vh so
+   the page never scrolls. Below 900px the original flowing, scrollable
+   stacked layout (above) is untouched. */
+@media (min-width: 901px) {
+  body { height: 100vh; overflow: hidden; }
+  .hero { padding: 0; }
+  .hero__stage { min-height: 0; }
+
+  .flask-hero .flask-stage {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 5;
+  }
+  /* Same visual offset the socials had under the flask in flow (340px stage,
+     2rem gap, -5rem pull-up), reproduced from the flask's now-fixed center. */
+  .hero__socials {
+    position: fixed; top: calc(50% + 122px); left: 50%; transform: translateX(-50%);
+    margin-top: 0; z-index: 5;
+  }
+  .skill-column--left, .skill-column--right {
+    position: fixed; top: 50%; transform: translateY(-50%);
+  }
+  .skill-column--left  { right: calc(50% + 120px + var(--stage-gap)); }
+  .skill-column--right { left:  calc(50% + 120px + var(--stage-gap)); }
 }
 
 /* ---------- Footer ---------- */
