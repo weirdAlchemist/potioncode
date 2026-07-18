@@ -16,10 +16,10 @@ whole site (the "PotionCode" brand — *"programming is more akin to alchemy tha
 chemistry"*). It lives in:
 
 - **Markup:** the `.flask-hero` → `.flask` block in `index.html` (the `.flask__body`,
-  `.flask__liquid`, `.bubble`, `.fizz`, etc.).
-- **Styles:** the `/* ---------- CSS potion flask ---------- */` section and the
-  `/* Big central flask */` block in `css/styles.css` (roughly the `.flask*`,
-  `.flask-hero`, `.flask-stage` rules).
+  `.flask__liquid`, `.flask__bubble`, `.flask__fizz`, etc.).
+- **Styles:** its own **`css/flask.css`** file — the entire `.flask*` block, the
+  `rise`/`fizz`/`surface` keyframes, and the `.flask-hero` / `.flask-stage` staging
+  rules. Nothing flask-related lives in `css/styles.css` anymore.
 
 **Treat the flask as locked.** Do not restyle, resize, re-animate, replace, or "improve"
 it — including its colors, glow, scale, bubbles, or fizz — **unless the user explicitly
@@ -30,8 +30,9 @@ the flask as a side effect, call it out and confirm first.
 ## Structure
 
 ```
-index.html            Content & markup (Materialize + custom classes)
-css/styles.css        Custom theme layered on Materialize. Brand colors in :root at top.
+index.html            Content & markup (Materialize + custom BEM classes)
+css/styles.css        Custom theme layered on Materialize (BEM). Brand colors in :root at top.
+css/flask.css         The locked central potion flask — all .flask* rules + keyframes.
 js/main.js            Materialize init, scroll-in animations, stat count-up. Site works if JS fails.
 vendor/               materialize.min.*, animate.min.css, material-icons.css, fonts/  (all local)
 assets/               resume.pdf and images go here
@@ -50,6 +51,11 @@ assets/               resume.pdf and images go here
   `--accent-grad`). Tweak these first for color changes.
 - Custom CSS is **layered on top of** Materialize — keep that separation; don't edit
   files under `vendor/`.
+- **Our classes are BEM** (`block__element--modifier`, e.g. `mini-card__label`,
+  `mini-card--interactive`, `musing--open`). State toggled by JS is a `--modifier`, not
+  an `is-*` class. Vendor/utility classes (Materialize `container`, `nav-wrapper`,
+  `brand-logo`, `material-icons`, `page-footer`; Animate.css `animate__*`; and the
+  `will-animate` JS hook) stay as-is — don't BEM-ify them.
 - Scroll animations: add `class="will-animate"` + `data-anim="animate__…"` (optional
   `data-delay`) to an element; `js/main.js` reveals it via IntersectionObserver.
 - Stat count-up: `.stat-num[data-count]` elements animate up when scrolled into view.

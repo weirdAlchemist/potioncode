@@ -1,0 +1,106 @@
+/* =========================================================
+   PotionCode — the central bubbling potion flask.
+   The hero centerpiece and brand identity (pure CSS, no assets).
+   LOCKED: do not restyle, resize, or re-animate without being asked.
+   Values here are moved verbatim from the old styles.css flask block;
+   only class names changed (BEM): .bubble -> .flask__bubble,
+   .fizz -> .flask__fizz.
+   ========================================================= */
+
+/* ---------- CSS potion flask ---------- */
+.flask { position: relative; width: 60px; height: 74px; }
+
+/* Conical (Erlenmeyer) silhouette — the clip also masks the liquid & bubbles */
+.flask__body {
+  position: absolute; inset: 0;
+  clip-path: polygon(38% 0, 62% 0, 62% 33%, 100% 100%, 0 100%, 38% 33%);
+  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.03));
+  border-bottom: 0;
+}
+/* Glass highlight streak */
+.flask__shine {
+  position: absolute; top: 12%; left: 30%;
+  width: 8%; height: 62%; border-radius: 40%;
+  background: linear-gradient(rgba(255,255,255,.35), transparent);
+  transform: rotate(10deg); filter: blur(.5px);
+}
+/* Flask mouth / rim */
+.flask__rim {
+  position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
+  width: 26%; height: 5px; border-radius: 50%;
+  background: rgba(255,255,255,.28);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.25);
+}
+
+/* Purple potion — matches the logo accent */
+.flask__liquid {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 52%;
+  background: linear-gradient(180deg, #b79bff 0%, var(--accent) 40%, #7c5cf0 100%);
+  box-shadow: 0 0 22px 2px rgba(167,139,250,.75);
+}
+.flask__liquid::before { /* wobbling surface */
+  content: ""; position: absolute; top: -3px; left: 0; right: 0; height: 6px;
+  background: #c9b6ff; border-radius: 50%;
+  animation: surface 3s ease-in-out infinite;
+}
+
+/* Bubbles rising inside the potion */
+.flask__bubble {
+  position: absolute; bottom: 4px; border-radius: 50%;
+  background: rgba(255,255,255,.7);
+  box-shadow: 0 0 4px rgba(255,255,255,.5);
+  opacity: 0;
+  animation: rise 2.6s ease-in infinite;
+}
+.flask__bubble:nth-child(1) { left: 22%; width: 6px; height: 6px; animation-duration: 2.6s; animation-delay: 0s; }
+.flask__bubble:nth-child(2) { left: 46%; width: 5px; height: 5px; animation-duration: 2.1s; animation-delay: .5s; }
+.flask__bubble:nth-child(3) { left: 64%; width: 7px; height: 7px; animation-duration: 3.0s; animation-delay: 1s; }
+.flask__bubble:nth-child(4) { left: 34%; width: 4px; height: 4px; animation-duration: 2.3s; animation-delay: 1.4s; }
+.flask__bubble:nth-child(5) { left: 55%; width: 6px; height: 6px; animation-duration: 2.8s; animation-delay: .8s; }
+
+/* A few bubbles fizzing out of the mouth */
+.flask__fizz {
+  position: absolute; top: 4px; left: 50%;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(183,155,255,.95);
+  box-shadow: 0 0 6px rgba(167,139,250,.9);
+  opacity: 0;
+  animation: fizz 3s ease-in infinite;
+}
+.flask .flask__fizz:nth-child(3) { margin-left: -7px; animation-delay: .3s; }
+.flask .flask__fizz:nth-child(4) { margin-left: 0;    animation-delay: 1.3s; width: 4px; height: 4px; }
+.flask .flask__fizz:nth-child(5) { margin-left: 6px;  animation-delay: 2.1s; }
+
+@keyframes rise {
+  0%   { transform: translateY(0)     scale(.5); opacity: 0; }
+  15%  { opacity: .9; }
+  85%  { opacity: .7; }
+  100% { transform: translateY(-46px) scale(1);  opacity: 0; }
+}
+@keyframes fizz {
+  0%   { transform: translateY(0)     scale(.4); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateY(-34px) scale(1);  opacity: 0; }
+}
+@keyframes surface {
+  0%, 100% { transform: scaleX(1);   }
+  50%      { transform: scaleX(1.15); opacity: .85; }
+}
+
+/* ---------- Flask staging: glow, scale, and the column it lives in ---------- */
+.flask-hero { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+.flask-stage {
+  position: relative; display: grid; place-items: center;
+  width: 240px; height: 340px;
+}
+.flask-stage::before { /* potion glow */
+  content: ""; position: absolute; bottom: 32px;
+  width: 230px; height: 230px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,.30), transparent 68%);
+  filter: blur(8px); z-index: 0;
+}
+.flask-stage .flask { transform: scale(3); z-index: 1; }
+
+@media (max-width: 900px) {
+  .flask-hero { order: -1; }
+}

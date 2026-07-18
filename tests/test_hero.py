@@ -64,11 +64,11 @@ def test_social_icon_is_clickable(page: Page, live_server: str, label, href_frag
 def test_clicking_card_opens_musing(page: Page, live_server: str):
     _open(page, live_server)
     musing = page.locator("#musing")
-    expect(musing).not_to_have_class(re.compile(r"\bis-open\b"))
+    expect(musing).not_to_have_class(re.compile(r"\bmusing--open\b"))
 
     page.get_by_role("button", name="4y Test Automation").click()
 
-    expect(musing).to_have_class(re.compile(r"\bis-open\b"))
+    expect(musing).to_have_class(re.compile(r"\bmusing--open\b"))
     expect(page.locator(".musing__title")).to_have_text("4y Test Automation")
     expect(page.locator(".musing__body")).to_contain_text("stable")
 
@@ -90,29 +90,29 @@ def test_every_interactive_card_opens_its_musing(page: Page, live_server: str):
     """Every clickable skill card reveals a musing titled with its own label."""
     _open(page, live_server)
     labels = page.eval_on_selector_all(
-        ".mini-card.is-interactive .mini-card__label",
+        ".mini-card--interactive .mini-card__label",
         "els => els.map(e => e.textContent.trim())",
     )
     assert len(labels) == 11, labels  # 8 skill cards + 3 Personal cards
     musing = page.locator("#musing")
     for label in labels:
         page.get_by_role("button", name=label, exact=True).click()
-        expect(musing).to_have_class(re.compile(r"\bis-open\b"))
+        expect(musing).to_have_class(re.compile(r"\bmusing--open\b"))
         expect(page.locator(".musing__title")).to_have_text(label)
         assert page.locator(".musing__body").inner_text().strip(), f"empty musing: {label}"
         page.keyboard.press("Escape")
-        expect(musing).not_to_have_class(re.compile(r"\bis-open\b"))
+        expect(musing).not_to_have_class(re.compile(r"\bmusing--open\b"))
 
 
 def test_clicking_away_closes_musing(page: Page, live_server: str):
     _open(page, live_server)
     musing = page.locator("#musing")
     page.get_by_role("button", name="8y Fullstack Dev").click()
-    expect(musing).to_have_class(re.compile(r"\bis-open\b"))
+    expect(musing).to_have_class(re.compile(r"\bmusing--open\b"))
 
     # Clicking anywhere neutral dismisses it.
     page.get_by_text("Sebastian Rapp").click()
-    expect(musing).not_to_have_class(re.compile(r"\bis-open\b"))
+    expect(musing).not_to_have_class(re.compile(r"\bmusing--open\b"))
 
 
 def test_opening_musing_does_not_move_flask_or_cards(page: Page, live_server: str):
@@ -125,7 +125,7 @@ def test_opening_musing_does_not_move_flask_or_cards(page: Page, live_server: st
     before_card = _rounded(card.bounding_box())
 
     card.click()
-    expect(page.locator("#musing")).to_have_class(re.compile(r"\bis-open\b"))
+    expect(page.locator("#musing")).to_have_class(re.compile(r"\bmusing--open\b"))
 
     # Move the mouse off the card: Playwright leaves it hovering after the
     # click, and .mini-card:hover lifts the card by 3px (intended hover
@@ -143,7 +143,7 @@ def test_mini_cards_share_one_width(page: Page, live_server: str):
     _open(page, live_server)
     per_col = {
         side: page.eval_on_selector_all(
-            f".skill-col--{side} .mini-card",
+            f".skill-column--{side} .mini-card",
             "els => els.map(e => Math.round(e.getBoundingClientRect().width))",
         )
         for side in ("left", "right")
@@ -165,13 +165,13 @@ def test_musing_visible_in_stacked_view(page: Page, live_server: str):
 
     # Confirm we're actually stacked: the columns sit below the flask, not beside it.
     flask = page.locator(".flask-stage").bounding_box()
-    left = page.locator(".skill-col--left").bounding_box()
+    left = page.locator(".skill-column--left").bounding_box()
     assert left["y"] > flask["y"] + 100, "expected the stacked (single-column) layout"
 
     # Playwright scrolls the (lower) card into view before clicking — so an
     # absolute box anchored to the top of the page would end up off-screen.
     page.get_by_role("button", name="8y Fullstack Dev").click()
-    expect(page.locator("#musing")).to_have_class(re.compile(r"\bis-open\b"))
+    expect(page.locator("#musing")).to_have_class(re.compile(r"\bmusing--open\b"))
 
     # Pinned to the viewport, so scrolling can't push it off the top of the page.
     assert page.eval_on_selector("#musing", "e => getComputedStyle(e).position") == "fixed"
@@ -192,13 +192,13 @@ def test_personal_group_row_on_desktop_column_when_stacked(page: Page, live_serv
     _open(page, live_server)
 
     labels = page.eval_on_selector_all(
-        ".personal-cards .mini-card__label", "els => els.map(e => e.textContent.trim())"
+        ".personal__cards .mini-card__label", "els => els.map(e => e.textContent.trim())"
     )
     assert labels == ["City", "Self", "Interests"], labels
 
     def card_positions():
         return page.eval_on_selector_all(
-            ".personal-cards .mini-card",
+            ".personal__cards .mini-card",
             "els => els.map(e => { const r = e.getBoundingClientRect();"
             " return {x: Math.round(r.x), y: Math.round(r.y)}; })",
         )
@@ -213,8 +213,8 @@ def test_personal_group_row_on_desktop_column_when_stacked(page: Page, live_serv
     page.set_viewport_size({"width": 390, "height": 800})
     stacked = card_positions()
     assert stacked[0]["y"] < stacked[1]["y"] < stacked[2]["y"], stacked
-    dev = page.locator(".skill-col--right").bounding_box()
-    personal = page.locator(".personal-group").bounding_box()
+    dev = page.locator(".skill-column--right").bounding_box()
+    personal = page.locator(".personal").bounding_box()
     assert personal["y"] > dev["y"], ("Personal should be last", personal, dev)
 
 

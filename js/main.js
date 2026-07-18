@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (musing) {
     const titleEl = musing.querySelector('.musing__title');
     const bodyEl = musing.querySelector('.musing__body');
-    const cards = document.querySelectorAll('.mini-card.is-interactive');
+    const cards = document.querySelectorAll('.mini-card--interactive');
 
     // A note may be split into "What I did" / "What I think" parts; render each
     // as a labelled section. Notes without the split fall back to raw content.
@@ -94,12 +94,12 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         bodyEl.innerHTML = note.innerHTML;
       }
-      musing.classList.add('is-open');
-      cards.forEach((c) => c.classList.toggle('is-active', c === card));
+      musing.classList.add('musing--open');
+      cards.forEach((c) => c.classList.toggle('mini-card--active', c === card));
     };
     const closeMusing = () => {
-      musing.classList.remove('is-open');
-      cards.forEach((c) => c.classList.remove('is-active'));
+      musing.classList.remove('musing--open');
+      cards.forEach((c) => c.classList.remove('mini-card--active'));
     };
 
     cards.forEach((card) => {
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Clicking anywhere hides it again and lets the hero move back up.
     document.addEventListener('click', () => {
-      if (musing.classList.contains('is-open')) closeMusing();
+      if (musing.classList.contains('musing--open')) closeMusing();
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeMusing();
