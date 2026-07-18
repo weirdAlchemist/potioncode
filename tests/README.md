@@ -62,6 +62,10 @@ pytest tests -k clickable         # just the social-icon regression
 - **`test_opening_musing_does_not_move_flask_or_cards`** — the overlay floats on
   top; the flask and mini-cards don't shift.
 - **`test_mini_cards_share_one_width`** — the skill cards stay uniformly sized.
+- **`test_flask_stays_centered_after_reveal_animation`** — the flask stays
+  pinned to the exact viewport center once its scroll-reveal animation
+  finishes (a stale animate.css class previously hijacked its `position:
+  fixed` containing block).
 
 `test_projects.py` (projects.html orbit):
 - **`test_flask_is_a_clickable_github_link`** — the flask doubles as a GitHub

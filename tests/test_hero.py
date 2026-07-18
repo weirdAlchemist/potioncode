@@ -157,6 +157,37 @@ def test_mini_cards_share_one_width(page: Page, live_server: str):
     assert max(all_widths) - min(all_widths) <= 2, per_col
 
 
+def test_flask_stays_centered_after_reveal_animation(page: Page, live_server: str):
+    """Regression test for a real bug: the flask (and its social icons) were
+    pinned dead-center of the viewport via `position: fixed`, but the
+    scroll-reveal animation (animate.css `animate__zoomIn`, added by JS on
+    `.flask-hero`) was left attached forever via `animation-fill-mode: both`.
+    Chromium and Firefox both then keep treating `.flask-hero` as an active
+    transform-animation target — which makes *it*, not the viewport, the
+    containing block for its `position: fixed` children, yanking the flask up
+    near the top of the page.
+
+    Unlike the other tests in this file, this one must NOT freeze animations
+    (`_open()`'s `animation: none !important`) — the bug only exists once a
+    real CSS animation has actually played on the element, so the test lets
+    it run for real and waits for it to finish.
+    """
+    page.set_viewport_size({"width": 1440, "height": 900})  # desktop: fixed-centered layout
+    page.goto(f"{live_server}/index.html")
+
+    # Let the real reveal animation run to completion (1s duration) rather
+    # than freezing it away.
+    page.wait_for_timeout(1500)
+
+    flask_box = page.locator(".flask-hero .flask-stage").bounding_box()
+    viewport = page.evaluate("() => ({ width: window.innerWidth, height: window.innerHeight })")
+
+    center_x = flask_box["x"] + flask_box["width"] / 2
+    center_y = flask_box["y"] + flask_box["height"] / 2
+    assert abs(center_x - viewport["width"] / 2) <= 1, (flask_box, viewport)
+    assert abs(center_y - viewport["height"] / 2) <= 1, (flask_box, viewport)
+
+
 def test_musing_visible_in_stacked_view(page: Page, live_server: str):
     """Narrow/stacked layout: the musing opens below the sticky navbar and stays
     on-screen — no scrolling up required to see it."""
