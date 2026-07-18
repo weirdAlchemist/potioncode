@@ -93,7 +93,7 @@ def test_every_interactive_card_opens_its_musing(page: Page, live_server: str):
         ".mini-card--interactive .mini-card__label",
         "els => els.map(e => e.textContent.trim())",
     )
-    assert len(labels) == 11, labels  # 8 skill cards + 3 Personal cards
+    assert len(labels) == 8, labels  # 8 skill cards
     musing = page.locator("#musing")
     for label in labels:
         page.get_by_role("button", name=label, exact=True).click()
@@ -183,39 +183,6 @@ def test_musing_visible_in_stacked_view(page: Page, live_server: str):
     assert card["y"] >= nav["y"] + nav["height"] - 1, ("overlaps navbar", card, nav)
     # ...and fully within the viewport.
     assert 0 <= card["y"] and card["y"] + card["height"] <= viewport_h, ("off-screen", card, viewport_h)
-
-
-def test_personal_group_row_on_desktop_column_when_stacked(page: Page, live_server: str):
-    """The Personal group is a horizontal row on desktop and switches to a
-    vertical column (as the last group) in the stacked layout."""
-    page.set_viewport_size({"width": 1280, "height": 900})
-    _open(page, live_server)
-
-    labels = page.eval_on_selector_all(
-        ".personal__cards .mini-card__label", "els => els.map(e => e.textContent.trim())"
-    )
-    assert labels == ["City", "Self", "Interests"], labels
-
-    def card_positions():
-        return page.eval_on_selector_all(
-            ".personal__cards .mini-card",
-            "els => els.map(e => { const r = e.getBoundingClientRect();"
-            " return {x: Math.round(r.x), y: Math.round(r.y)}; })",
-        )
-
-    # Desktop: same row (equal y), left-to-right.
-    desk = card_positions()
-    assert desk[0]["y"] == desk[1]["y"] == desk[2]["y"], desk
-    assert desk[0]["x"] < desk[1]["x"] < desk[2]["x"], desk
-
-    # Stacked: vertical column (increasing y), and the group sits last —
-    # below the Development column.
-    page.set_viewport_size({"width": 390, "height": 800})
-    stacked = card_positions()
-    assert stacked[0]["y"] < stacked[1]["y"] < stacked[2]["y"], stacked
-    dev = page.locator(".skill-column--right").bounding_box()
-    personal = page.locator(".personal").bounding_box()
-    assert personal["y"] > dev["y"], ("Personal should be last", personal, dev)
 
 
 def _rounded(box):
