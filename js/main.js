@@ -24,6 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const delay = parseInt(el.dataset.delay || '0', 10);
         setTimeout(() => {
           el.classList.add('animate__animated', anim);
+          // animate.css classes left in place keep an animation attached to
+          // the element (fill-mode: both) even once it's visually finished —
+          // Chromium and Firefox then both keep treating it as an active
+          // transform-animation target, which makes it the containing block
+          // for any position:fixed descendants instead of the viewport.
+          // Drop the classes once the animation is done and let a plain
+          // "revealed" class hold the opacity, so nothing about the element
+          // still looks animated to the browser.
+          el.addEventListener('animationend', () => {
+            el.classList.remove('animate__animated', anim);
+            el.classList.add('will-animate--revealed');
+          }, { once: true });
         }, delay);
         io.unobserve(el);
       });
@@ -31,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     animated.forEach((el) => io.observe(el));
   } else {
     // No IO support — just reveal everything.
-    animated.forEach((el) => el.classList.add('animate__animated'));
+    animated.forEach((el) => el.classList.add('will-animate--revealed'));
   }
 
   // --- Stat count-up ---

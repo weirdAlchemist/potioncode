@@ -301,7 +301,8 @@ main { position: relative; }
 /* ---------- Scroll animation helper ---------- */
 /* Elements start hidden; JS adds the animate.css classes when they scroll in. */
 .will-animate { opacity: 0; }
-.will-animate.animate__animated { opacity: 1; }
+.will-animate.animate__animated,
+.will-animate.will-animate--revealed { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
   .will-animate { opacity: 1 !important; }
