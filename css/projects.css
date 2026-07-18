@@ -26,6 +26,26 @@
   z-index: 2;
 }
 
+/* ---------- Flask is a GitHub link on this page — make that visible ---------- */
+.flask-link {
+  display: inline-block; line-height: 0; cursor: pointer;
+  border-radius: 50%; -webkit-tap-highlight-color: transparent;
+}
+.flask--projects { transition: transform .25s var(--ease), filter .25s var(--ease); }
+.flask-link:hover .flask--projects,
+.flask-link:focus-visible .flask--projects {
+  transform: scale(3.08);
+  filter: brightness(1.12);
+}
+.flask-link:hover .flask__brand-icon,
+.flask-link:focus-visible .flask__brand-icon {
+  fill: #fff;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, .85));
+}
+.flask-link:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 8px;
+}
+
 /* ---------- Project nodes ---------- */
 .project-node {
   position: absolute; top: 50%; left: 50%;

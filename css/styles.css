@@ -19,6 +19,7 @@
   --accent-2:  #34d399;   /* emerald "potion" glow */
   --accent-grad: linear-gradient(135deg, #a78bfa, #34d399);
   --ease: cubic-bezier(.22, 1, .36, 1);
+  --rail-w: 44px;   /* width of the page-rail prev/next carousel arrows */
 }
 
 /* ---------- Base ---------- */
@@ -33,6 +34,10 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* Reserve room on both edges for the fixed, full-height page-rail arrows
+     so they never overlap the navbar, hero, or footer content. */
+  padding-left: var(--rail-w);
+  padding-right: var(--rail-w);
 }
 /* Ambient background glow */
 body::before {
@@ -212,6 +217,57 @@ main { position: relative; }
 }
 .footer__inner p { color: var(--text-dim); margin: 0; }
 
+/* ---------- Page rail: carousel-style prev/next arrows ---------- */
+/* Full-height, thin edge strips linking to the adjacent "card" (page) in the
+   site's carousel. Fixed so they stay put while the page scrolls; body's
+   left/right padding (--rail-w) keeps them from ever covering content. */
+.page-rail {
+  position: fixed; top: 0; bottom: 0; z-index: 30;
+  width: var(--rail-w);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .7rem;
+  background: color-mix(in srgb, var(--bg-soft) 88%, transparent);
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: background .2s, color .2s;
+}
+.page-rail--left  { left: 0; border-right: 1px solid var(--border); }
+.page-rail--right { right: 0; border-left: 1px solid var(--border); }
+.page-rail:hover, .page-rail:focus-visible {
+  color: #fff; background: var(--accent-grad); border-color: transparent;
+}
+.page-rail:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+.page-rail__arrow { font-size: 1.3rem; line-height: 1; }
+.page-rail__label {
+  display: inline-block;
+  transform: rotate(-90deg);
+  font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  :root { --rail-w: 32px; }
+  .page-rail__label { display: none; }
+  .page-rail__arrow { font-size: 1.1rem; }
+}
+
+/* ---------- Cross-page "flip" transition (progressive enhancement) ---------- */
+/* Opts both documents into the native View Transitions API for normal link
+   navigation between them. No JS: unsupported browsers (anything but
+   Chromium today) just navigate instantly, exactly as before. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition { perspective: 1800px; }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: .5s;
+  animation-timing-function: var(--ease);
+}
+::view-transition-old(root) { animation-name: page-flip-out; }
+::view-transition-new(root) { animation-name: page-flip-in; }
+@keyframes page-flip-out { to   { transform: rotateY(-90deg); opacity: 0; } }
+@keyframes page-flip-in  { from { transform: rotateY(90deg);  opacity: 0; } }
+
 /* ---------- Scroll animation helper ---------- */
 /* Elements start hidden; JS adds the animate.css classes when they scroll in. */
 .will-animate { opacity: 0; }
@@ -220,4 +276,7 @@ main { position: relative; }
 @media (prefers-reduced-motion: reduce) {
   .will-animate { opacity: 1 !important; }
   * { animation-duration: .001ms !important; scroll-behavior: auto; }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
 }
