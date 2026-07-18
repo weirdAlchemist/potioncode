@@ -1,0 +1,129 @@
+<!--
+  Personal website / web business card — Material Design edition
+  --------------------------------------------------------------
+  Projects page: same nav / hero / footer shell as index.html, with the
+  flask re-used as centerpiece (GitHub mark suspended in the liquid) and
+  five placeholder project nodes orbiting it. See css/projects.css.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PotionCode — Projects</title>
+  <meta name="description" content="PotionCode — selected projects. A look at what's been brewed." />
+
+  <!-- Vendor libraries (local) -->
+  <link rel="stylesheet" href="vendor/material-icons.css" />
+  <link rel="stylesheet" href="vendor/materialize.min.css" />
+  <link rel="stylesheet" href="vendor/animate.min.css" />
+  <!-- Custom theme on top of Materialize -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- The central potion flask (brand centerpiece) -->
+  <link rel="stylesheet" href="css/flask.css" />
+  <!-- Projects-page-only layout (orbit + flask GitHub overlay) -->
+  <link rel="stylesheet" href="css/projects.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#129514;</text></svg>" />
+</head>
+<body>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav-extended navbar" id="top">
+    <div class="nav-wrapper container">
+      <a href="#top" class="brand-logo brand">
+        <span class="brand__name">Potion<span class="accent">Code</span></span>
+        <span class="brand__motto">because sometimes programming is more akin to alchemy than chemistry</span>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ===================== HERO / PROJECTS ORBIT ===================== -->
+    <header class="hero projects-hero">
+      <div class="container">
+        <h2 class="group-title projects-title will-animate" data-anim="animate__fadeInUp">Projects</h2>
+
+        <div class="projects-orbit">
+          <!-- Flask (center), GitHub mark suspended in the liquid -->
+          <div class="flask-stage will-animate" data-anim="animate__zoomIn">
+            <div class="flask flask--projects" aria-hidden="true">
+              <div class="flask__body">
+                <span class="flask__shine"></span>
+                <div class="flask__liquid">
+                  <span class="flask__bubble"></span>
+                  <span class="flask__bubble"></span>
+                  <span class="flask__bubble"></span>
+                  <span class="flask__bubble"></span>
+                  <span class="flask__bubble"></span>
+                  <svg class="flask__brand-icon" viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.08.78 2.18 0 1.58-.01 2.85-.01 3.24 0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+                </div>
+              </div>
+              <span class="flask__rim"></span>
+              <span class="flask__fizz"></span>
+              <span class="flask__fizz"></span>
+              <span class="flask__fizz"></span>
+            </div>
+          </div>
+
+          <!-- Project nodes: placeholders, hover/focus to preview -->
+          <div class="project-node project-node--1 will-animate" data-anim="animate__fadeIn" data-delay="0" tabindex="0" aria-label="Project One preview">
+            <div class="project-node__thumb"><i class="material-icons" aria-hidden="true">image</i></div>
+            <span class="project-node__label">Project One</span>
+            <div class="project-node__detail">
+              <div class="project-node__detail-image"><i class="material-icons" aria-hidden="true">image</i></div>
+              <h3 class="project-node__detail-title">Project One</h3>
+              <p class="project-node__detail-text">Placeholder — details coming soon.</p>
+            </div>
+          </div>
+          <div class="project-node project-node--2 will-animate" data-anim="animate__fadeIn" data-delay="80" tabindex="0" aria-label="Project Two preview">
+            <div class="project-node__thumb"><i class="material-icons" aria-hidden="true">image</i></div>
+            <span class="project-node__label">Project Two</span>
+            <div class="project-node__detail">
+              <div class="project-node__detail-image"><i class="material-icons" aria-hidden="true">image</i></div>
+              <h3 class="project-node__detail-title">Project Two</h3>
+              <p class="project-node__detail-text">Placeholder — details coming soon.</p>
+            </div>
+          </div>
+          <div class="project-node project-node--3 will-animate" data-anim="animate__fadeIn" data-delay="160" tabindex="0" aria-label="Project Three preview">
+            <div class="project-node__thumb"><i class="material-icons" aria-hidden="true">image</i></div>
+            <span class="project-node__label">Project Three</span>
+            <div class="project-node__detail">
+              <div class="project-node__detail-image"><i class="material-icons" aria-hidden="true">image</i></div>
+              <h3 class="project-node__detail-title">Project Three</h3>
+              <p class="project-node__detail-text">Placeholder — details coming soon.</p>
+            </div>
+          </div>
+          <div class="project-node project-node--4 will-animate" data-anim="animate__fadeIn" data-delay="240" tabindex="0" aria-label="Project Four preview">
+            <div class="project-node__thumb"><i class="material-icons" aria-hidden="true">image</i></div>
+            <span class="project-node__label">Project Four</span>
+            <div class="project-node__detail">
+              <div class="project-node__detail-image"><i class="material-icons" aria-hidden="true">image</i></div>
+              <h3 class="project-node__detail-title">Project Four</h3>
+              <p class="project-node__detail-text">Placeholder — details coming soon.</p>
+            </div>
+          </div>
+          <div class="project-node project-node--5 will-animate" data-anim="animate__fadeIn" data-delay="320" tabindex="0" aria-label="Project Five preview">
+            <div class="project-node__thumb"><i class="material-icons" aria-hidden="true">image</i></div>
+            <span class="project-node__label">Project Five</span>
+            <div class="project-node__detail">
+              <div class="project-node__detail-image"><i class="material-icons" aria-hidden="true">image</i></div>
+              <h3 class="project-node__detail-title">Project Five</h3>
+              <p class="project-node__detail-text">Placeholder — details coming soon.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="page-footer footer">
+    <div class="container footer__inner">
+      <p>© <span id="year">2026</span> Sebastian Rapp</p>
+    </div>
+  </footer>
+
+  <!-- Vendor + custom JS -->
+  <script src="vendor/materialize.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
