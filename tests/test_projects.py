@@ -82,6 +82,25 @@ def test_only_the_hovered_node_shows_its_detail(page: Page, live_server: str):
     expect(two.locator(".project-node__detail")).to_be_hidden()
 
 
+def test_flask_stays_centered_during_reveal_animation(page: Page, live_server: str):
+    """The orbit flask must zoom in *in place* at the viewport center, like the
+    homepage flask — not slide in from the bottom-right. It regressed because
+    the flask-stage was centered with a `translate(-50%, -50%)` that the zoomIn
+    reveal's own `transform` overrode for the ~1s it ran. It's now centered with
+    auto margins, so the transform only scales it. Let the real animation play
+    (no freeze) and check the center holds throughout.
+    """
+    page.set_viewport_size({"width": 1440, "height": 900})
+    page.goto(f"{live_server}/projects.html")
+    viewport = page.evaluate("() => ({ width: window.innerWidth, height: window.innerHeight })")
+
+    for _ in range(6):
+        flask = page.locator(".flask-stage").bounding_box()
+        assert abs(flask["x"] + flask["width"] / 2 - viewport["width"] / 2) <= 1, flask
+        assert abs(flask["y"] + flask["height"] / 2 - viewport["height"] / 2) <= 1, flask
+        page.wait_for_timeout(120)
+
+
 # --- Responsive layout --------------------------------------------------------
 
 def test_orbit_collapses_to_a_stacked_list_on_narrow_viewports(page: Page, live_server: str):

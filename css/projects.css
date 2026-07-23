@@ -13,8 +13,11 @@
   height: min(720px, 94vw);
   margin: 1rem auto 2rem;
 }
+/* Centred via a definite size + auto margins rather than a translate, so the
+   flask-stage's own zoomIn reveal (which drives `transform`) zooms it in place
+   at center instead of sliding it in from the bottom-right — matching index. */
 .projects-orbit .flask-stage {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  position: absolute; inset: 0; margin: auto;
 }
 
 /* ---------- GitHub mark suspended in the potion (this page only) ---------- */
@@ -147,7 +150,7 @@
     position: static; width: auto; height: auto;
     display: flex; flex-direction: column; align-items: center; gap: 2.5rem;
   }
-  .projects-orbit .flask-stage { position: static; transform: none; }
+  .projects-orbit .flask-stage { position: static; margin: 0; }
   .project-node {
     position: relative; top: auto; left: auto; transform: none !important;
     width: 160px;

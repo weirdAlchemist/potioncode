@@ -1,9 +1,10 @@
 """Regression tests for the page-rail carousel arrows (index.html <-> projects.html).
 
-The rails are fixed, full-height strips pinned to the left/right edge of the
-viewport, with the body given matching left/right padding so the rails never
-sit on top of the navbar, hero, or footer. Guard both halves of that contract:
-the rails must actually be clickable (nothing painted over them, echoing the
+The rails are thin strips pinned to the left/right edge of the viewport,
+scoped to the content area (inside <main>) so they span only the hero and
+never box in the navbar or footer. The body's matching left/right padding
+reserves the gutter they live in. Guard both halves of that contract: the
+rails must actually be clickable (nothing painted over them, echoing the
 social-icon regression in test_hero.py) and the padding must actually reserve
 the space so page content never ends up underneath a rail.
 """
@@ -50,20 +51,28 @@ def test_clicking_rail_navigates_to_other_page(page: Page, live_server: str, pat
 
 
 @pytest.mark.parametrize("path, _target, _label", PAGES)
-def test_rails_are_fixed_at_the_viewport_edges(page: Page, live_server: str, path, _target, _label):
-    """Rails span the full viewport height and hug x=0 / the right edge."""
+def test_rails_hug_the_edges_of_the_content_area(page: Page, live_server: str, path, _target, _label):
+    """Rails hug x=0 / the right edge and span only the content area between
+    the navbar and footer — never boxing in the navbar or footer."""
     _open(page, live_server, path)
     viewport = page.viewport_size
 
     left_box = page.locator(".page-rail--left").bounding_box()
     right_box = page.locator(".page-rail--right").bounding_box()
+    navbar = page.locator(".navbar").bounding_box()
+    footer = page.locator(".footer").bounding_box()
 
+    # Horizontally flush with the viewport edges.
     assert left_box["x"] == pytest.approx(0, abs=1)
-    assert left_box["y"] == pytest.approx(0, abs=1)
-    assert left_box["height"] == pytest.approx(viewport["height"], abs=1)
-
     assert right_box["x"] + right_box["width"] == pytest.approx(viewport["width"], abs=1)
-    assert right_box["height"] == pytest.approx(viewport["height"], abs=1)
+
+    # Vertically confined to the content area: start at/below the navbar's
+    # bottom and end at/above the footer's top.
+    nav_bottom = navbar["y"] + navbar["height"]
+    footer_top = footer["y"]
+    for box in (left_box, right_box):
+        assert box["y"] >= nav_bottom - 1, (box, nav_bottom)
+        assert box["y"] + box["height"] <= footer_top + 1, (box, footer_top)
 
 
 @pytest.mark.parametrize("path, _target, _label", PAGES)

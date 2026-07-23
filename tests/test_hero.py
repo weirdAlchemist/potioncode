@@ -188,6 +188,39 @@ def test_flask_stays_centered_after_reveal_animation(page: Page, live_server: st
     assert abs(center_y - viewport["height"] / 2) <= 1, (flask_box, viewport)
 
 
+def test_flask_and_columns_stay_centered_during_reveal_animation(page: Page, live_server: str):
+    """Regression test for the *during-animation* displacement: the reveal used
+    to drive `transform` on ancestors/elements that were themselves the fixed,
+    dead-centered layout anchors, so for the ~1s the animation ran the flask
+    flew in from the top-left corner and the skill columns sat ~half their
+    height too low, snapping into place only when the animation ended.
+
+    The fix keeps the reveal's `transform` off the centering: the flask zooms
+    in place (animation on the fixed `.flask-stage`, centered by auto margins,
+    not a translate) and the columns are centered with flexbox, not translateY.
+    So they must stay put *throughout* the animation, not just after it. Like
+    the sibling test above, this one lets the real animation play (no freeze).
+    """
+    page.set_viewport_size({"width": 1440, "height": 900})
+    page.goto(f"{live_server}/index.html")
+    viewport = page.evaluate("() => ({ width: window.innerWidth, height: window.innerHeight })")
+
+    # Sample repeatedly while the ~1s reveal is still running.
+    for _ in range(6):
+        flask = page.locator(".flask-hero .flask-stage").bounding_box()
+        left = page.locator(".skill-column--left").bounding_box()
+        right = page.locator(".skill-column--right").bounding_box()
+
+        # Flask stays dead-center (it only scales — its center never moves).
+        assert abs(flask["x"] + flask["width"] / 2 - viewport["width"] / 2) <= 1, flask
+        assert abs(flask["y"] + flask["height"] / 2 - viewport["height"] / 2) <= 1, flask
+        # Columns stay vertically centered (they only slide horizontally).
+        assert abs(left["y"] + left["height"] / 2 - viewport["height"] / 2) <= 1, left
+        assert abs(right["y"] + right["height"] / 2 - viewport["height"] / 2) <= 1, right
+
+        page.wait_for_timeout(120)
+
+
 def test_musing_visible_in_stacked_view(page: Page, live_server: str):
     """Narrow/stacked layout: the musing opens below the sticky navbar and stays
     on-screen — no scrolling up required to see it."""
