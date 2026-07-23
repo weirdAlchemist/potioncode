@@ -6,7 +6,7 @@
 
 .projects-title { text-align: center; margin-bottom: 1rem; }
 
-/* ---------- Orbit: flask centered, 5 project nodes around it ---------- */
+/* ---------- Orbit: flask centered, 4 project nodes around it ---------- */
 .projects-orbit {
   position: relative;
   width: min(720px, 94vw);
@@ -50,22 +50,21 @@
 }
 
 /* ---------- Project nodes ---------- */
-/* The 5 nodes sit on a regular pentagon, radius --orbit-r (270px on tall
-   viewports). Expressed as a fraction of --orbit-r rather than fixed px so
-   it can shrink on short desktop windows — see the min-width:901px block
-   below, which caps --orbit-r by viewport height once the flask/orbit is
-   dead-centered, keeping the top node clear of the navbar. */
+/* The 4 nodes sit on a diamond (top / right / bottom / left) at radius
+   --orbit-r (270px on tall viewports). Expressed as a fraction of --orbit-r
+   rather than fixed px so it can shrink on short desktop windows — see the
+   min-width:901px block below, which caps --orbit-r by viewport height once
+   the flask/orbit is dead-centered, keeping the top node clear of the navbar. */
 :root { --orbit-r: 270px; }
 .project-node {
   position: absolute; top: 50%; left: 50%;
   width: 120px;
   outline: none;
 }
-.project-node--1 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  0),      calc(var(--orbit-r) * -1));      }
-.project-node--2 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  0.9519), calc(var(--orbit-r) * -0.3111)); }
-.project-node--3 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  0.5889), calc(var(--orbit-r) *  0.8074)); }
-.project-node--4 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) * -0.5889), calc(var(--orbit-r) *  0.8074)); }
-.project-node--5 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) * -0.9519), calc(var(--orbit-r) * -0.3111)); }
+.project-node--1 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  0), calc(var(--orbit-r) * -1)); } /* top */
+.project-node--2 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  1), calc(var(--orbit-r) *  0)); } /* right */
+.project-node--3 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) *  0), calc(var(--orbit-r) *  1)); } /* bottom */
+.project-node--4 { transform: translate(-50%, -50%) translate(calc(var(--orbit-r) * -1), calc(var(--orbit-r) *  0)); } /* left */
 
 .project-node__thumb {
   aspect-ratio: 4 / 3;
@@ -127,7 +126,7 @@
   .hero.projects-hero { padding: 0; }
 
   /* Dead-centering the orbit on a short window would push the top node
-     under the navbar — shrink the pentagon's radius once the viewport gets
+     under the navbar — shrink the diamond's radius once the viewport gets
      shorter than 900px tall (full 270px size is unaffected above that). */
   :root { --orbit-r: min(270px, 30vh); }
 
