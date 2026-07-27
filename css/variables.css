@@ -1,0 +1,23 @@
+/* =========================================================
+   Design tokens for PotionCode — the single place to tweak the
+   brand palette and core layout knobs. Loaded before styles.css /
+   flask.css / projects.css, which all consume these via var().
+   Dark-only theme. Responsive per-component overrides of a token
+   (e.g. --rail-w, --orbit-r) live with their component, not here.
+   ========================================================= */
+
+:root {
+  /* PotionCode — mystical potion-lab palette (violet ink + emerald glow) */
+  --bg:        #0e0c1a;
+  --bg-soft:   #171528;
+  --bg-card:   #1c1a30;
+  --border:    #2c2a44;
+  --text:      #ece9f5;
+  --text-dim:  #a39fb8;
+  --accent:    #a78bfa;   /* violet  */
+  --accent-2:  #34d399;   /* emerald "potion" glow */
+  --accent-grad: linear-gradient(135deg, #a78bfa, #34d399);
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --rail-w: 44px;   /* width of the page-rail prev/next carousel arrows */
+  --stage-gap: clamp(1rem, 4vw, 3.5rem);   /* gap between the flask and its flanking content */
+}

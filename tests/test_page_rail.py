@@ -76,16 +76,25 @@ def test_rails_hug_the_edges_of_the_content_area(page: Page, live_server: str, p
 
 
 @pytest.mark.parametrize("path, _target, _label", PAGES)
-def test_rails_do_not_cover_navbar_or_footer_content(page: Page, live_server: str, path, _target, _label):
-    """The body's --rail-w padding must actually keep content clear of the rails."""
+def test_navbar_and_footer_span_full_width(page: Page, live_server: str, path, _target, _label):
+    """Navbar and footer run edge to edge. Only <main> carries the rail gutter
+    (its left/right padding), so the chrome above and below the content is never
+    inset by it, while hero content still clears the rails."""
     _open(page, live_server, path)
-
+    vw = page.viewport_size["width"]
     rail_w = page.locator(".page-rail--left").bounding_box()["width"]
-    brand = page.locator(".brand-logo").bounding_box()
-    footer = page.locator(".footer__inner").bounding_box()
 
-    assert brand["x"] >= rail_w - 1, (brand, rail_w)
-    assert footer["x"] >= rail_w - 1, (footer, rail_w)
+    for sel in (".navbar", ".footer"):
+        box = page.locator(sel).bounding_box()
+        assert box["x"] == pytest.approx(0, abs=1), (sel, box)
+        assert box["x"] + box["width"] == pytest.approx(vw, abs=1), (sel, box)
+
+    # The gutter that keeps content off the rails now lives on <main>, not body.
+    pad_l, pad_r = page.eval_on_selector(
+        "main",
+        "m => { const s = getComputedStyle(m); return [parseFloat(s.paddingLeft), parseFloat(s.paddingRight)]; }",
+    )
+    assert pad_l >= rail_w - 1 and pad_r >= rail_w - 1, (pad_l, pad_r, rail_w)
 
 
 def test_rail_labels_hide_on_narrow_viewports(page: Page, live_server: str):

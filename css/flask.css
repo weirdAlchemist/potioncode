@@ -2,53 +2,72 @@
    PotionCode — the central bubbling potion flask.
    The hero centerpiece and brand identity (pure CSS, no assets).
    LOCKED: do not restyle, resize, or re-animate without being asked.
-   Values here are moved verbatim from the old styles.css flask block;
-   only class names changed (BEM): .bubble -> .flask__bubble,
-   .fizz -> .flask__fizz.
+   Its palette + geometry are pulled up into the :root tokens below
+   (values unchanged) so the whole flask can be retuned from one place;
+   the rules underneath consume them via var().
    ========================================================= */
 
+/* ---------- Flask design tokens ---------- */
+:root {
+  /* Colours */
+  --flask-glass:         255, 255, 255;            /* white glass tint — used via rgba() at various alphas */
+  --flask-glow:          167, 139, 250;            /* accent-violet potion glow (matches --accent) */
+  --flask-liquid-top:    #b79bff;                  /* potion gradient — top stop */
+  --flask-liquid-bottom: #7c5cf0;                  /* potion gradient — bottom stop (mid stop is --accent) */
+  --flask-surface:       #c9b6ff;                  /* wobbling liquid surface */
+  --flask-fizz-color:    rgba(183, 155, 255, .95); /* bubbles fizzing out of the mouth */
+
+  /* Geometry */
+  --flask-w:         60px;
+  --flask-h:         74px;
+  --flask-scale:     3;      /* how much the flask is scaled up inside its stage */
+  --flask-stage-w:   240px;
+  --flask-stage-h:   340px;
+  --flask-glow-size: 230px;  /* diameter of the radial potion glow behind the flask */
+}
+
 /* ---------- CSS potion flask ---------- */
-.flask { position: relative; width: 60px; height: 74px; }
+.flask { position: relative; width: var(--flask-w); height: var(--flask-h); }
 
 /* Conical (Erlenmeyer) silhouette — the clip also masks the liquid & bubbles */
 .flask__body {
   position: absolute; inset: 0;
   clip-path: polygon(38% 0, 62% 0, 62% 33%, 100% 100%, 0 100%, 38% 33%);
-  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.03));
+  background: linear-gradient(180deg, rgba(var(--flask-glass),.12), rgba(var(--flask-glass),.03));
   border-bottom: 0;
 }
 /* Glass highlight streak */
 .flask__shine {
   position: absolute; top: 12%; left: 30%;
   width: 8%; height: 62%; border-radius: 40%;
-  background: linear-gradient(rgba(255,255,255,.35), transparent);
+  background: linear-gradient(rgba(var(--flask-glass),.35), transparent);
   transform: rotate(10deg); filter: blur(.5px);
 }
 /* Flask mouth / rim */
 .flask__rim {
   position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
   width: 26%; height: 5px; border-radius: 50%;
-  background: rgba(255,255,255,.28);
-  box-shadow: 0 0 0 1px rgba(255,255,255,.25);
+  background: rgba(var(--flask-glass),.28);
+  box-shadow: 0 0 0 1px rgba(var(--flask-glass),.25);
 }
 
 /* Purple potion — matches the logo accent */
 .flask__liquid {
   position: absolute; left: 0; right: 0; bottom: 0; height: 52%;
-  background: linear-gradient(180deg, #b79bff 0%, var(--accent) 40%, #7c5cf0 100%);
-  box-shadow: 0 0 22px 2px rgba(167,139,250,.75);
+  background: linear-gradient(180deg, var(--flask-liquid-top) 0%, var(--accent) 40%, var(--flask-liquid-bottom) 100%);
+  box-shadow: 0 0 22px 2px rgba(var(--flask-glow),.75);
 }
 .flask__liquid::before { /* wobbling surface */
   content: ""; position: absolute; top: -3px; left: 0; right: 0; height: 6px;
-  background: #c9b6ff; border-radius: 50%;
+  background: var(--flask-surface); border-radius: 50%;
   animation: surface 3s ease-in-out infinite;
 }
 
 /* Bubbles rising inside the potion */
 .flask__bubble {
   position: absolute; bottom: 4px; border-radius: 50%;
-  background: rgba(255,255,255,.7);
-  box-shadow: 0 0 4px rgba(255,255,255,.5);
+  background: rgba(var(--flask-glass),.7);
+  box-shadow: 0 0 4px rgba(var(--flask-glass),.5);
   opacity: 0;
   animation: rise 2.6s ease-in infinite;
 }
@@ -62,8 +81,8 @@
 .flask__fizz {
   position: absolute; top: 4px; left: 50%;
   width: 5px; height: 5px; border-radius: 50%;
-  background: rgba(183,155,255,.95);
-  box-shadow: 0 0 6px rgba(167,139,250,.9);
+  background: var(--flask-fizz-color);
+  box-shadow: 0 0 6px rgba(var(--flask-glow),.9);
   opacity: 0;
   animation: fizz 3s ease-in infinite;
 }
@@ -91,15 +110,15 @@
 .flask-hero { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
 .flask-stage {
   position: relative; display: grid; place-items: center;
-  width: 240px; height: 340px;
+  width: var(--flask-stage-w); height: var(--flask-stage-h);
 }
 .flask-stage::before { /* potion glow */
   content: ""; position: absolute; bottom: 32px;
-  width: 230px; height: 230px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(167,139,250,.30), transparent 68%);
+  width: var(--flask-glow-size); height: var(--flask-glow-size); border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--flask-glow),.30), transparent 68%);
   filter: blur(8px); z-index: 0;
 }
-.flask-stage .flask { transform: scale(3); z-index: 1; }
+.flask-stage .flask { transform: scale(var(--flask-scale)); z-index: 1; }
 
 @media (max-width: 900px) {
   .flask-hero { order: -1; }

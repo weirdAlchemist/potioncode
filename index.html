@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="vendor/material-icons.css" />
   <link rel="stylesheet" href="vendor/materialize.min.css" />
   <link rel="stylesheet" href="vendor/animate.min.css" />
+  <!-- Design tokens (brand palette + layout knobs) — load before the theme -->
+  <link rel="stylesheet" href="css/variables.css" />
   <!-- Custom theme on top of Materialize -->
   <link rel="stylesheet" href="css/styles.css" />
   <!-- The central potion flask (brand centerpiece) -->
@@ -70,15 +72,15 @@
                 <span class="mini-card__label">4y Test Automation</span>
                 <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
                 <div class="mini-card__note" hidden>
-                  <div class="mini-card__did"><p>to be added</p></div>
-                  <div class="mini-card__think"><p>4 years of test automation, test environment handling, and general senior developer things. What I learned is how hard it is to get a <em>stable</em> test suite running — and what a feeling of accomplishment it gives when such a suite finds issues.</p></div>
+                  <div class="mini-card__did"><p>test automation, test environment handling, and general senior developer things</p></div>
+                  <div class="mini-card__think"><p>What I learned is how hard it is to get a <em>stable</em> test suite running — and what a feeling of accomplishment it gives when such a suite finds issues.</p></div>
                 </div>
               </div>
               <div class="mini-card mini-card--interactive" role="button" tabindex="0">
                 <span class="mini-card__label">Selenium &amp; Playwright</span>
                 <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
                 <div class="mini-card__note" hidden>
-                  <div class="mini-card__did"><p>to be added</p></div>
+                  <div class="mini-card__did"><p>Setup projects, define architecture, implement tests</p></div>
                   <div class="mini-card__think">
                     <p>Testing web applications in web browsers will always be useful. No matter the project size or amount of complex logic, there will always be ways to break things.</p>
                     <p>This very page is an example of that truth. While it's little more than fun CSS trickery and a bit of HTML, it actually got regression bugs introduced when redesigning parts of it. So now this little landing page has a full suite of Playwright tests that make sure core functionality will always work.</p>
@@ -90,10 +92,10 @@
                 <span class="mini-card__label">Test Environments</span>
                 <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
                 <div class="mini-card__note" hidden>
-                  <div class="mini-card__did"><p>to be added</p></div>
+                  <div class="mini-card__did"><p>Definition, configuration, maintenance on virtual machines and build/test pipelines</p></div>
                   <div class="mini-card__think">
-                    <p>While it is tradition and fun to test and fix on production systems, this mentality is reserved for developers. Customers rarely share this sentiment — and they might have a point.</p>
-                    <p>Proper Staging Environments help the Pipeline and keep everyone involved happy and secure.</p>
+                    <p>While it is tradition and fun to test and fix on production systems, this mentality is reserved for developers. <br/>Customers rarely share this sentiment — and they might have a point.</p>
+                    <p>Proper Staging Environments help the pipeline and keep everyone involved happy and secure.</p>
                     <p><em>It is all fun and games until you delete the prod database.</em></p>
                   </div>
                 </div>
@@ -102,9 +104,9 @@
                 <span class="mini-card__label">ISTQB&reg; Certification</span>
                 <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
                 <div class="mini-card__note" hidden>
-                  <div class="mini-card__did"><p>to be added</p></div>
+                  <div class="mini-card__did"><p>Working on it</p></div>
                   <div class="mini-card__think">
-                    <p>On paper it's vocabulary and process theory — dry, until you're on a team with no shared language for quality and "severity" and "priority" get used interchangeably. Then it earns its keep.</p>
+                    <p>On paper it's vocabulary and process theory — dry, downright boring. In the real world words have meaning and processes protect gainst chaos. </p>
                     <p><em>A certificate says you studied; the bugs you catch say the rest.</em></p>
                   </div>
                 </div>
@@ -158,7 +160,7 @@
                 <span class="mini-card__label">8y Fullstack Dev</span>
                 <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
                 <div class="mini-card__note" hidden>
-                  <div class="mini-card__did"><p>to be added</p></div>
+                  <div class="mini-card__did"><p>webbased asset management, webbased license management, auxillery things, hotfixes and hot messes</p></div>
                   <div class="mini-card__think"><p>8 years of fullstack web development on an asset management software taught me the value of "keep it simple".</p></div>
                 </div>
               </div>
@@ -166,10 +168,13 @@
                 <span class="mini-card__label">C# &amp; Python at work</span>
                 <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
                 <div class="mini-card__note" hidden>
-                  <div class="mini-card__did"><p>to be added</p></div>
+                  <div class="mini-card__did">
+                    <p>C# is my main language and goto for projects that will exist for a long time and see a lot of updates and changes in scope.</p>
+                    <p>Python is my multifunctional tool to have something "work" before lunch.</p>
+                  </div>
                   <div class="mini-card__think">
-                    <p>C# by day: typed, structured, at home at enterprise scale. Python when something needs to exist by this afternoon. Living in both keeps me honest about when strictness helps and when it just gets in the way.</p>
-                    <p><em>Pick the language that fits the problem — usually the one the team already speaks.</em></p>
+                    <p>C# is my bread and butter: typed, structured, scaling from small tools to enterprise software. Python is proving my concepts and fixing the problems of my colleagues.</p>
+                    <p><em>Pick the language that fits the problem and doesn't bring too many of its own along the way.</em></p>
                   </div>
                 </div>
               </div>
@@ -177,10 +182,10 @@
                 <span class="mini-card__label">Flutter/Dart on mobile</span>
                 <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
                 <div class="mini-card__note" hidden>
-                  <div class="mini-card__did"><p>to be added</p></div>
+                  <div class="mini-card__did"><p>Companion app for asset management, documentation tooling for on-site colleagues. Small-scale tools.</p></div>
                   <div class="mini-card__think">
-                    <p>One codebase for both stores is a hard pitch to argue with on a small team. Dart took a moment to warm to, but hot reload makes shaping a UI feel almost like play.</p>
-                    <p><em>Write once, debug everywhere — just far less everywhere than before.</em></p>
+                    <p>When I was in a slump and didn't really connect anymore with my work as software developer Flutter/Dart reignited my love with the craft.</p>
+                    <p><em>When this ends up on Googles graveyard I will actually be upset about it.</em></p>
                   </div>
                 </div>
               </div>
@@ -188,9 +193,9 @@
                 <span class="mini-card__label">Godot for games</span>
                 <i class="material-icons mini-card__chevron" aria-hidden="true">expand_more</i>
                 <div class="mini-card__note" hidden>
-                  <div class="mini-card__did"><p>to be added</p></div>
+                  <div class="mini-card__did"><p>Nothing concrete yet, mostly recreating game mechanics and trying out algorithms.</p></div>
                   <div class="mini-card__think">
-                    <p>Godot is where the after-hours experiments live: open source, lightweight, and blissfully free of subscription pop-ups. Game dev is a good reminder that not everything has to ship.</p>
+                    <p>Godot is slim and lightweight - easy to pick up and drag to whatever weird place you're going with your ideas.</p>
                     <p><em>All work and no play makes Jack a dull boy.</em></p>
                   </div>
                 </div>

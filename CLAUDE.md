@@ -31,7 +31,8 @@ the flask as a side effect, call it out and confirm first.
 
 ```
 index.html            Content & markup (Materialize + custom BEM classes)
-css/styles.css        Custom theme layered on Materialize (BEM). Brand colors in :root at top.
+css/variables.css     Design tokens: :root brand palette + layout knobs. Loaded before the rest.
+css/styles.css        Custom theme layered on Materialize (BEM). Consumes the tokens via var().
 css/flask.css         The locked central potion flask — all .flask* rules + keyframes.
 js/main.js            Materialize init, scroll-in animations, stat count-up. Site works if JS fails.
 vendor/               materialize.min.*, animate.min.css, material-icons.css, fonts/  (all local)
@@ -46,8 +47,8 @@ assets/               resume.pdf and images go here
 - **Materialize CSS 1.0.0** (Material Design components) + **Animate.css 4.1.1**
   (scroll-in animations) + **Material Icons** (offline font). All vendored — **no CDN,
   no npm, no build.** Do not add a build step or pull libraries from a CDN unless asked.
-- **Theme is dark-only.** Brand colors live in the `:root` block at the top of
-  `css/styles.css` (`--bg`, `--accent` violet, `--accent-2` emerald "potion" glow,
+- **Theme is dark-only.** Brand colors live in the `:root` block in
+  `css/variables.css` (`--bg`, `--accent` violet, `--accent-2` emerald "potion" glow,
   `--accent-grad`). Tweak these first for color changes.
 - Custom CSS is **layered on top of** Materialize — keep that separation; don't edit
   files under `vendor/`.
