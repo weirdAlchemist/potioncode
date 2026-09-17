@@ -1,0 +1,164 @@
+/* =========================================================
+   Work page only — the vertical career timeline.
+   Layered on top of styles.css and consumes the tokens from
+   variables.css. Nothing here touches the flask (css/flask.css).
+
+   Layout: a single column of stages, newest first, hung off a
+   vertical "spine" that runs the height of the list. The spine is
+   a violet→emerald gradient and each stage is pinned to it by a
+   round marker, so the column reads as potion settling in a tube
+   rather than a plain bulleted list.
+   ========================================================= */
+
+/* Geometry knobs: the marker is centred on the spine by construction,
+   so nudging --spine-x moves both together. */
+.work-timeline {
+  --spine-x: 11px;      /* centre line of the spine, from the list's left edge */
+  --marker-d: 22px;     /* marker diameter */
+  --gutter: 1.9rem;     /* space between the spine and the stage cards */
+}
+
+/* ---------- Page intro ---------- */
+.work-intro {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto clamp(2rem, 5vw, 3.25rem);
+}
+.work-intro__title {
+  font-size: clamp(1.9rem, 4.5vw, 2.6rem); font-weight: 800; margin: 0 0 .6rem;
+  background: var(--accent-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.work-intro__lead {
+  color: var(--text-dim); line-height: 1.7; margin: 0;
+}
+
+/* ---------- Timeline ---------- */
+.work-timeline {
+  list-style: none;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 0 0 calc(var(--spine-x) + var(--gutter));
+  position: relative;
+}
+/* The spine. Inset top/bottom so it starts and ends at the first/last
+   marker instead of overshooting past them. */
+.work-timeline::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--spine-x) - 1px);
+  top: calc(var(--marker-d) / 2);
+  bottom: calc(var(--marker-d) / 2);
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  opacity: .5;
+  border-radius: 2px;
+}
+
+.work-timeline__stage { position: relative; }
+.work-timeline__stage + .work-timeline__stage { margin-top: clamp(1.5rem, 4vw, 2.25rem); }
+
+/* Marker: a bubble sitting on the spine, echoing the flask's rising bubbles. */
+.work-timeline__marker {
+  position: absolute;
+  /* The stage's left edge sits one --gutter right of the spine, so walking
+     back by the gutter plus half the marker lands it centred on the line. */
+  left: calc(-1 * var(--gutter) - var(--marker-d) / 2);
+  top: 1.35rem;
+  width: var(--marker-d); height: var(--marker-d);
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 16px -2px var(--accent);
+}
+/* Inner emerald core — the "potion" inside the bubble. */
+.work-timeline__marker::after {
+  content: "";
+  position: absolute; inset: 4px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  opacity: .85;
+}
+
+/* ---------- Stage card ---------- */
+.work-timeline__card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(1.1rem, 3vw, 1.6rem) clamp(1.2rem, 3vw, 1.8rem);
+  transition: transform .2s var(--ease), border-color .2s, box-shadow .2s;
+}
+.work-timeline__card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 26px -16px var(--accent);
+}
+
+.work-timeline__head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem 1rem;
+  margin-bottom: 1.1rem;
+}
+.work-timeline__company {
+  margin: 0; font-size: clamp(1.15rem, 2.6vw, 1.45rem); font-weight: 800;
+  color: var(--text);
+}
+/* Duration badge — emerald, so it reads as metadata next to the company. */
+.work-timeline__years {
+  margin: 0; margin-left: auto;
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .82rem; font-weight: 700; letter-spacing: .04em;
+  color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 35%, transparent);
+  border-radius: 999px;
+  padding: .25rem .7rem;
+  white-space: nowrap;
+}
+.work-timeline__years .material-icons { font-size: 1rem; }
+
+/* Section labels reuse the musing panel's look (uppercase, emerald, tracked)
+   so a stage reads like the musings on the home page. */
+.work-timeline__label {
+  margin: 0 0 .55rem; font-size: .78rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--accent-2);
+}
+/* The "what I think" label is the one that follows the list — rule it off from
+   the bullets above, so the divider separates the two sections rather than
+   splitting a label from its own body text. */
+.work-timeline__list + .work-timeline__label {
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+}
+
+.work-timeline__list {
+  list-style: none; margin: 0 0 1.1rem; padding: 0;
+  color: var(--text-dim); line-height: 1.65;
+}
+.work-timeline__list li {
+  position: relative; padding-left: 1.4rem;
+}
+.work-timeline__list li + li { margin-top: .45rem; }
+/* Violet marker per item. Not list-style so the colour is ours to set. */
+.work-timeline__list li::before {
+  content: "";
+  position: absolute; left: .3rem; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+}
+
+/* The closing opinion — matches the musing panel's italic emerald voice. */
+.work-timeline__musing {
+  margin: 0;
+  color: var(--text-dim); line-height: 1.7;
+}
+.work-timeline__musing em { color: var(--accent-2); font-style: italic; }
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 600px) {
+  .work-timeline {
+    --marker-d: 18px;
+    --gutter: 1.25rem;
+  }
+  .work-timeline__head { gap: .35rem .6rem; }
+  /* Let the badge sit under the company name rather than squeezing it. */
+  .work-timeline__years { margin-left: 0; }
+}
