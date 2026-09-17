@@ -10,6 +10,15 @@
    rather than a plain bulleted list.
    ========================================================= */
 
+/* Breathing room between the page switcher and the intro.
+   Compounded with .hero to out-specify the desktop rule in styles.css that
+   zeroes .hero's padding — that rule belongs to the index composition, where
+   the flask is pinned to the viewport centre and any padding would fight it,
+   but here it left the intro butted right up against the tabs. */
+.hero.work-hero {
+  padding-top: clamp(2rem, 5vw, 3.5rem);
+}
+
 /* Geometry knobs: the marker is centred on the spine by construction,
    so nudging --spine-x moves both together. It lives on .work-hero rather
    than on the list because the outro flask below has to line up with the
