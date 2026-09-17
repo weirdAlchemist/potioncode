@@ -37,12 +37,18 @@ main {
 h1,h2,h3,h4,h5 { font-weight: 700; }
 
 /* ---------- Navbar ---------- */
+/* The navbar and the page switcher stick as one block. Sticking them
+   separately would need the switcher's offset to equal the navbar's height,
+   which varies (the motto wraps at narrow widths) — pinning the wrapper keeps
+   the tabs welded to the border they hang off, at any size. */
+.site-head {
+  position: sticky; top: 0; z-index: 20;
+}
 .navbar {
   background: color-mix(in srgb, var(--bg) 72%, transparent);
   backdrop-filter: blur(12px);
   box-shadow: none;
   border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 20;
   height: auto;
 }
 .navbar .nav-wrapper { min-height: 72px; }
@@ -238,6 +244,53 @@ main { position: relative; }
   flex-wrap: wrap; gap: 1rem; padding: 1.2rem 1rem;
 }
 .footer__inner p { color: var(--text-dim); margin: 0; }
+
+/* ---------- Page switcher ---------- */
+/* A centred row of tabs hanging off the navbar's bottom border. Sits directly
+   under the nav in flow, with square top corners so it reads as attached to
+   that border rather than floating below it. */
+.pagenav {
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+  margin-top: -1px;      /* overlap the navbar's 1px border so they share an edge */
+}
+.pagenav__item {
+  /* One fixed width for every tab, so the boxes stay uniform no matter how
+     long the label is — same reasoning as .skill-column__cards. */
+  width: 116px;
+  padding: .55rem .5rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: .92rem;
+  letter-spacing: .02em;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-top: none;                    /* the navbar's border is this tab's top edge */
+  border-radius: 0 0 12px 12px;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.pagenav__item:hover,
+.pagenav__item:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-soft);
+}
+.pagenav__item:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+/* The page you're already on: accent text, not a link. */
+.pagenav__item--current {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  box-shadow: 0 6px 18px -10px var(--accent);
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .pagenav { gap: .35rem; }
+  .pagenav__item { width: 96px; font-size: .84rem; padding: .5rem .35rem; }
+}
 
 /* ---------- Cross-page "flip" transition (progressive enhancement) ---------- */
 /* Opts both documents into the native View Transitions API for normal link

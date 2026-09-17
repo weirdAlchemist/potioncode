@@ -34,6 +34,8 @@
 <body class="page page--locked">
 
   <!-- ===================== NAV ===================== -->
+  <!-- Navbar + page switcher stick to the top as one block (see .site-head). -->
+  <header class="site-head">
   <nav class="nav-extended navbar" id="top">
     <div class="nav-wrapper container">
       <a href="#top" class="brand-logo brand">
@@ -42,6 +44,17 @@
       </a>
     </div>
   </nav>
+
+  <!-- ===================== PAGE SWITCHER ===================== -->
+  <!-- A div rather than a <nav>: Materialize styles the bare `nav` element
+       (fixed height, line-height, background), which would fight these tabs.
+       role/aria-label keep the landmark semantics. -->
+  <div class="pagenav" role="navigation" aria-label="Pages">
+    <a class="pagenav__item" href="projects.html">Projects</a>
+    <span class="pagenav__item pagenav__item--current" aria-current="page">Main</span>
+    <a class="pagenav__item" href="work.html">Work</a>
+  </div>
+  </header>
 
   <main>
     <!-- Musing panel: revealed above the hero when a skill card is clicked,

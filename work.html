@@ -34,6 +34,8 @@
 <body class="page">
 
   <!-- ===================== NAV ===================== -->
+  <!-- Navbar + page switcher stick to the top as one block (see .site-head). -->
+  <header class="site-head">
   <nav class="nav-extended navbar" id="top">
     <div class="nav-wrapper container">
       <a href="#top" class="brand-logo brand">
@@ -42,6 +44,17 @@
       </a>
     </div>
   </nav>
+
+  <!-- ===================== PAGE SWITCHER ===================== -->
+  <!-- Fixed order across every page so the tabs never move under the cursor;
+       only the highlighted one changes. A div rather than a <nav>: Materialize
+       styles the bare `nav` element, which would fight these tabs. -->
+  <div class="pagenav" role="navigation" aria-label="Pages">
+    <a class="pagenav__item" href="projects.html">Projects</a>
+    <a class="pagenav__item" href="index.html">Main</a>
+    <span class="pagenav__item pagenav__item--current" aria-current="page">Work</span>
+  </div>
+  </header>
 
   <main>
     <!-- ===================== WORK TIMELINE ===================== -->
