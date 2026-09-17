@@ -13,6 +13,12 @@ import re
 import pytest
 from playwright.sync_api import Page, expect
 
+from conftest import requires_projects
+
+# The rails are the carousel between index.html and projects.html; with the
+# projects page hidden they aren't rendered at all.
+pytestmark = requires_projects
+
 
 def _open(page: Page, live_server: str, path: str) -> None:
     page.goto(f"{live_server}/{path}")

@@ -16,6 +16,19 @@ import pytest
 # Repo root = the folder above tests/, regardless of where pytest is run from.
 ROOT = Path(__file__).resolve().parent.parent
 
+# --- Feature flag: the projects page is temporarily hidden -------------------
+# index.html's page rails are commented out (the projects page isn't ready to
+# show off yet), so there is no way into projects.html and nothing to hit-test.
+# The rail and projects-orbit suites can't pass while that holds. Flip this to
+# True in the same commit that uncomments the rails in index.html.
+PROJECTS_ENABLED = False
+
+requires_projects = pytest.mark.skipif(
+    not PROJECTS_ENABLED,
+    reason="projects page hidden: page rails are commented out in index.html "
+    "(set PROJECTS_ENABLED = True in tests/conftest.py when they return)",
+)
+
 
 class _QuietHandler(http.server.SimpleHTTPRequestHandler):
     """SimpleHTTPRequestHandler that doesn't spam the test output."""

@@ -12,6 +12,12 @@ import re
 import pytest
 from playwright.sync_api import Page, expect
 
+from conftest import requires_projects
+
+# projects.html still exists and still works, but it is unreachable from the
+# site while the page rails are hidden — treat the whole page as off.
+pytestmark = requires_projects
+
 
 def _open(page: Page, live_server: str) -> None:
     page.goto(f"{live_server}/projects.html")
