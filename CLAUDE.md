@@ -99,3 +99,15 @@ navigating and fails if anything covers the element. See `tests/README.md` for
 the details (including the animation/font/`:hover` gotchas the tests guard
 against). Keep these green when touching the hero, and note the flask-lock rule
 still applies to the flask itself.
+
+## "Deploy"
+
+When the user says **deploy**, run this sequence — no need to ask for the steps:
+
+1. `pytest tests` — run the suite; stop and report if anything fails.
+2. Commit the work on `develop`.
+3. Fast-forward `main` to `develop` (`git checkout main && git merge develop --ff-only`).
+4. Push both branches to `origin`.
+5. `git checkout develop` — always end back on the dev branch.
+
+Day-to-day work happens on `develop`; `main` only ever fast-forwards to it.
