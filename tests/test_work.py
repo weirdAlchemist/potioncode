@@ -48,7 +48,7 @@ def test_stages_run_newest_first(page: Page, live_server: str):
 @pytest.mark.parametrize(
     "company, years, bullets",
     [
-        ("LIS GmbH", "4 years", 3),
+        ("LIS GmbH", "4 years", 4),
         ("IDEA Data Solutions GmbH", "8 years", 3),
     ],
 )
