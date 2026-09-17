@@ -211,6 +211,48 @@ def test_markers_stay_on_the_spine_on_narrow_viewports(page: Page, live_server: 
     assert centre == pytest.approx(spine["centre"], abs=1.5), (centre, spine)
 
 
+def _wheel_scroll(page: Page, delta: int = 600) -> int:
+    """Scroll the way a user does, and report where we landed.
+
+    This has to be a real wheel event. `window.scrollTo` is NOT a substitute:
+    `overflow: hidden` still permits *scripted* scrolling and only blocks the
+    user, so a scripted-scroll assertion passes happily on a page that is
+    completely frozen in the browser -- which is exactly the bug being guarded.
+    """
+    page.add_style_tag(content="html { scroll-behavior: auto !important; }")
+    box = page.viewport_size
+    page.mouse.move(box["width"] / 2, box["height"] / 2)
+    page.mouse.wheel(0, delta)
+    page.wait_for_timeout(300)
+    return page.evaluate("() => Math.round(document.scrollingElement.scrollTop)")
+
+
+@pytest.mark.parametrize("width", [1280, 1000])
+def test_timeline_scrolls_on_desktop(page: Page, live_server: str, width):
+    """The desktop rule that clips the page to 100vh belongs to the hero and the
+    projects orbit, where a fixed flask makes scrolling meaningless. It used to
+    be an unscoped `body` rule, which silently froze this page: the timeline ran
+    past the fold with no way to reach it. It is opt-in via .page--locked now,
+    and this page must not carry it.
+    """
+    page.set_viewport_size({"width": width, "height": 800})
+    _open(page, live_server)
+
+    reach = page.evaluate(
+        "() => document.scrollingElement.scrollHeight - document.scrollingElement.clientHeight"
+    )
+    assert reach > 0, "timeline no longer overflows the viewport; test is vacuous"
+    assert _wheel_scroll(page) > 0, f"page is scroll-locked at {width}px"
+
+
+def test_outro_flask_is_reachable_by_scrolling(page: Page, live_server: str):
+    """The payoff at the end of the timeline has to actually be reachable."""
+    page.set_viewport_size({"width": 1280, "height": 800})
+    _open(page, live_server)
+    _wheel_scroll(page, 4000)
+    expect(page.locator(".work-outro .flask")).to_be_in_viewport()
+
+
 @pytest.mark.parametrize("width", [1280, 900, 390])
 def test_page_never_scrolls_sideways(page: Page, live_server: str, width):
     """Cards live inside main's rail gutter; long company names must wrap

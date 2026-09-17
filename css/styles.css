@@ -197,11 +197,15 @@ main { position: relative; }
 /* Above the mobile breakpoint, the flask anchors to the exact center of the
    screen and everything else (skill columns, social links) is positioned off
    that same center point instead of flowing in the grid — the composition no
-   longer depends on the navbar/footer height. body is clipped to 100vh so
-   the page never scrolls. Below 900px the original flowing, scrollable
-   stacked layout (above) is untouched. */
+   longer depends on the navbar/footer height. Below 900px the original
+   flowing, scrollable stacked layout (above) is untouched. */
 @media (min-width: 901px) {
-  body { height: 100vh; overflow: hidden; }
+  /* Clipping to 100vh is opt-in per page, not a blanket body rule: it belongs
+     to single-viewport compositions like the hero and the projects orbit,
+     where scrolling would just drag a fixed flask around. Pages with real
+     long-form content (the work timeline) must be allowed to scroll, so they
+     simply don't carry the modifier. */
+  .page--locked { height: 100vh; overflow: hidden; }
   .hero { padding: 0; }
   .hero__stage { min-height: 0; }
 

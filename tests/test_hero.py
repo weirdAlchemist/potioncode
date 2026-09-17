@@ -249,5 +249,29 @@ def test_musing_visible_in_stacked_view(page: Page, live_server: str):
     assert 0 <= card["y"] and card["y"] + card["height"] <= viewport_h, ("off-screen", card, viewport_h)
 
 
+def test_hero_stays_clipped_to_one_viewport_on_desktop(page: Page, live_server: str):
+    """The desktop composition pins the flask, the skill columns and the socials
+    to the centre of the viewport, so the page deliberately does not scroll.
+    That clip is opt-in via the .page--locked modifier on <body> (it used to be
+    an unscoped `body` rule, which froze the work timeline too) — so assert the
+    home page still opts in, from behaviour rather than from the class name.
+    """
+    page.set_viewport_size({"width": 1280, "height": 800})
+    _open(page, live_server)
+    page.add_style_tag(content="html { scroll-behavior: auto !important; }")
+
+    # A real wheel event, not window.scrollTo: overflow:hidden still allows
+    # scripted scrolling and only blocks the user, so a scripted scroll would
+    # report movement on a page that is frozen in the browser.
+    page.mouse.move(640, 400)
+    page.mouse.wheel(0, 600)
+    page.wait_for_timeout(300)
+
+    top = page.evaluate("() => Math.round(document.scrollingElement.scrollTop)")
+    overflow = page.eval_on_selector("body", "b => getComputedStyle(b).overflowY")
+    assert overflow == "hidden", overflow
+    assert top == 0, f"hero scrolled to {top}; the desktop composition should be pinned"
+
+
 def _rounded(box):
     return {k: round(v) for k, v in box.items()}
