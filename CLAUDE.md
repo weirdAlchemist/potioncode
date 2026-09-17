@@ -100,20 +100,30 @@ the details (including the animation/font/`:hover` gotchas the tests guard
 against). Keep these green when touching the hero, and note the flask-lock rule
 still applies to the flask itself.
 
-## "Deploy"
+## Finishing a change — and "deploy"
 
-When the user says **deploy**, run this sequence — no need to ask for the steps:
+**Never push without being asked.** Pushing is the user's call, every time. Finishing a
+piece of work means taking it to a local commit and stopping there:
 
 1. `pytest tests` — run the suite; stop and report if anything fails.
-2. Commit the work on `develop`.
-3. Fast-forward `main` to `develop` (`git checkout main && git merge develop --ff-only`).
-4. Push both branches to `origin`.
-5. `git checkout develop` — always end back on the dev branch.
+2. Commit the work on `develop`. Local only.
+3. Say what's committed and waiting, and ask whether to push.
+
+Then stop. Don't merge to `main`, don't push, don't offer to "just do it quickly".
+
+When the user says **deploy** — that *is* the go-ahead. Finish the sequence:
+
+4. Fast-forward `main` to `develop` (`git checkout main && git merge develop --ff-only`).
+5. Push both branches to `origin`.
+6. `git checkout develop` — always end back on the dev branch.
+
+If there's nothing new to push when they say it, say so rather than manufacturing an
+empty commit.
 
 Day-to-day work happens on `develop`; `main` only ever fast-forwards to it.
 
 **The push to `origin/main` is the actual deploy.** The webserver has a git hook on
 `origin/main` commits, so anything pushed there goes live immediately — there is no
-separate publish step and no staging in between. Treat step 4 as irreversible-ish:
-tests must be green and the change must be one the user has asked for before `main`
-gets pushed. Pushing `develop` alone is safe and changes nothing on the live site.
+separate publish step and no staging in between. That asymmetry is the whole reason
+for the gate above: a local commit is cheap to amend or drop, a push to `main` is
+public. Pushing `develop` alone is safe and changes nothing on the live site.
