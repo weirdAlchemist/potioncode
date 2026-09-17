@@ -53,13 +53,15 @@ def test_stages_run_newest_first(page: Page, live_server: str):
     ],
 )
 def test_every_stage_is_complete(page: Page, live_server: str, company, years, bullets):
-    """Each stage carries all four parts: company, duration, what I did, what I think."""
+    """Each stage carries all five parts: company, duration, what I did, the
+    skill badges, and what I think."""
     _open(page, live_server)
     stage = page.locator(".work-timeline__stage").filter(has_text=company)
 
     expect(stage.locator(".work-timeline__company")).to_have_text(company)
     expect(stage.locator(".work-timeline__years")).to_contain_text(years)
     expect(stage.locator(".work-timeline__list li")).to_have_count(bullets)
+    expect(stage.locator(".work-timeline__badge").first).to_be_visible()
 
     musing = stage.locator(".work-timeline__musing")
     expect(musing).to_be_visible()
@@ -67,6 +69,40 @@ def test_every_stage_is_complete(page: Page, live_server: str, company, years, b
     # musings -- a stage without one is missing its point.
     expect(musing.locator("em")).to_be_visible()
     assert musing.locator("em").inner_text().strip(), "musing quote is empty"
+
+
+@pytest.mark.parametrize(
+    "company, skills",
+    [
+        ("LIS GmbH", ["C#", "Selenium", "Playwright", "Azure"]),
+        ("IDEA Data Solutions GmbH", ["C#", "ASP.NET", "SQL", "CouchDB"]),
+    ],
+)
+def test_stage_lists_its_skill_badges(page: Page, live_server: str, company, skills):
+    _open(page, live_server)
+    stage = page.locator(".work-timeline__stage").filter(has_text=company)
+    assert stage.locator(".work-timeline__badge").all_text_contents() == skills
+
+
+def test_badges_sit_between_the_bullets_and_the_musing(page: Page, live_server: str):
+    """Reading order is what I did -> what I used -> what I think. The divider
+    above 'What I think' is an adjacent-sibling rule, so inserting the badge row
+    in the wrong place would silently drop it."""
+    _open(page, live_server)
+    stage = page.locator(".work-timeline__stage").first
+
+    bullets_bottom = stage.locator(".work-timeline__list").bounding_box()
+    badges = stage.locator(".work-timeline__badges").bounding_box()
+    musing = stage.locator(".work-timeline__musing").bounding_box()
+
+    assert bullets_bottom["y"] + bullets_bottom["height"] <= badges["y"] + 1
+    assert badges["y"] + badges["height"] <= musing["y"] + 1
+
+    # The section divider survived the insertion.
+    border = stage.locator(".work-timeline__label").last.evaluate(
+        "el => getComputedStyle(el).borderTopWidth"
+    )
+    assert border != "0px", "section divider above 'What I think' is missing"
 
 
 # --- Geometry ----------------------------------------------------------------

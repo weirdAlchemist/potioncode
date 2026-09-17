@@ -121,16 +121,17 @@
   margin: 0 0 .55rem; font-size: .78rem; font-weight: 700;
   letter-spacing: .08em; text-transform: uppercase; color: var(--accent-2);
 }
-/* The "what I think" label is the one that follows the list — rule it off from
-   the bullets above, so the divider separates the two sections rather than
-   splitting a label from its own body text. */
-.work-timeline__list + .work-timeline__label {
+/* The "what I think" label is the one that follows the bullets/badges — rule it
+   off from them, so the divider separates the two sections rather than
+   splitting a label from its own body text. Matching both siblings keeps the
+   rule in place whether or not a stage carries a badge row. */
+:is(.work-timeline__list, .work-timeline__badges) + .work-timeline__label {
   padding-top: 1.2rem;
   border-top: 1px solid var(--border);
 }
 
 .work-timeline__list {
-  list-style: none; margin: 0 0 1.1rem; padding: 0;
+  list-style: none; margin: 0 0 .95rem; padding: 0;
   color: var(--text-dim); line-height: 1.65;
 }
 .work-timeline__list li {
@@ -143,6 +144,25 @@
   position: absolute; left: .3rem; top: .62em;
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--accent);
+}
+
+/* ---------- Skill badges ---------- */
+/* The headline tech for a stage, under its bullets. Violet rather than the
+   emerald used by the duration badge, so "what I worked with" and "how long I
+   was there" stay visually distinct. */
+.work-timeline__badges {
+  list-style: none;
+  display: flex; flex-wrap: wrap; gap: .45rem;
+  margin: 0 0 1.1rem; padding: 0;
+}
+.work-timeline__badge {
+  font-size: .78rem; font-weight: 700; letter-spacing: .02em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 999px;
+  padding: .28rem .72rem;
+  white-space: nowrap;
 }
 
 /* The closing opinion — matches the musing panel's italic emerald voice. */
