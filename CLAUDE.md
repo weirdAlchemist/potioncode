@@ -102,19 +102,24 @@ still applies to the flask itself.
 
 ## Finishing a change — and "deploy"
 
-**Never push without being asked.** Pushing is the user's call, every time. Finishing a
-piece of work means taking it to a local commit and stopping there:
+**Commit early and often on `develop`, and push `develop` to `origin` freely** — it is
+a backup, it changes nothing on the live site, and work should not sit only on the
+local machine. Don't wait to be asked for that part.
+
+**`main` is the gate.** Finishing a piece of work means:
 
 1. `pytest tests` — run the suite; stop and report if anything fails.
-2. Commit the work on `develop`. Local only.
-3. Say what's committed and waiting, and ask whether to push.
+2. Commit the work on `develop` and push `develop` to `origin`.
+3. Say what's waiting on `develop`, and ask whether to deploy.
 
-Then stop. Don't merge to `main`, don't push, don't offer to "just do it quickly".
+Then stop. Don't merge to `main`, don't push `main`, don't offer to "just do it
+quickly". Prefer several small commits over one large one — a commit per coherent
+change, pushed as you go.
 
 When the user says **deploy** — that *is* the go-ahead. Finish the sequence:
 
 4. Fast-forward `main` to `develop` (`git checkout main && git merge develop --ff-only`).
-5. Push both branches to `origin`.
+5. Push `main` to `origin` (and `develop`, if it isn't already up to date).
 6. `git checkout develop` — always end back on the dev branch.
 
 If there's nothing new to push when they say it, say so rather than manufacturing an
