@@ -3,7 +3,7 @@
    brand palette and core layout knobs. Loaded before styles.css /
    flask.css / projects.css, which all consume these via var().
    Dark-only theme. Responsive per-component overrides of a token
-   (e.g. --rail-w, --orbit-r) live with their component, not here.
+   (e.g. --orbit-r) live with their component, not here.
    ========================================================= */
 
 :root {
@@ -18,6 +18,5 @@
   --accent-2:  #34d399;   /* emerald "potion" glow */
   --accent-grad: linear-gradient(135deg, #a78bfa, #34d399);
   --ease: cubic-bezier(.22, 1, .36, 1);
-  --rail-w: 44px;   /* width of the page-rail prev/next carousel arrows */
   --stage-gap: clamp(1rem, 4vw, 3.5rem);   /* gap between the flask and its flanking content */
 }

@@ -31,11 +31,6 @@ body::before {
 main, .page-footer { position: relative; z-index: 1; }
 main {
   flex: 1 0 auto;   /* grow to fill, pushing the footer to the bottom */
-  /* Reserve room on both edges for the page-rail arrows so they never overlap
-     the hero content. Only main carries this gutter — the navbar and footer
-     span the full page width. */
-  padding-left: var(--rail-w);
-  padding-right: var(--rail-w);
 }
 
 .accent { color: var(--accent); }
@@ -243,43 +238,6 @@ main { position: relative; }
   flex-wrap: wrap; gap: 1rem; padding: 1.2rem 1rem;
 }
 .footer__inner p { color: var(--text-dim); margin: 0; }
-
-/* ---------- Page rail: carousel-style prev/next arrows ---------- */
-/* Thin edge strips linking to the adjacent "card" (page) in the site's
-   carousel. Absolutely positioned inside <main> so they span only the content
-   area — never the navbar or footer. main's left/right padding (--rail-w)
-   reserves the gutter they sit in at the viewport edges, so page content never
-   ends up under a rail. */
-.page-rail {
-  position: absolute; top: 0; bottom: 0; z-index: 30;
-  width: var(--rail-w);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-dim);
-  text-decoration: none;
-  transition: color .2s;
-}
-.page-rail--left  { left:  0; }
-.page-rail--right { right: 0; }
-.page-rail:hover, .page-rail:focus-visible { color: var(--accent-2); }
-.page-rail:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
-.page-rail__arrow { width: 100%; height: 80%; }
-/* Horizontal label sitting beside the chevron, vertically centred. Absolutely
-   positioned so it only widens the (small) clickable link — the rail's own box
-   stays in the edge gutter and never blocks content. */
-.page-rail__label {
-  position: absolute; top: 50%; transform: translateY(-50%) rotate(-90deg);
-  font-size: .9rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-  white-space: nowrap;
-}
-.page-rail--left  .page-rail__label { left: 100%; margin-left: .4rem; }
-/* Mirror the right label's rotation so both read "upward" toward their own
-   edge instead of both spinning the same way. */
-.page-rail--right .page-rail__label { right: 100%; margin-right: .4rem; transform: translateY(-50%) rotate(90deg); }
-
-@media (max-width: 480px) {
-  :root { --rail-w: 32px; }
-  .page-rail__label { display: none; }
-}
 
 /* ---------- Cross-page "flip" transition (progressive enhancement) ---------- */
 /* Opts both documents into the native View Transitions API for normal link
