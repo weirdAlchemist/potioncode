@@ -105,6 +105,62 @@ def test_badges_sit_between_the_bullets_and_the_musing(page: Page, live_server: 
     assert border != "0px", "section divider above 'What I think' is missing"
 
 
+# --- Outro flask -------------------------------------------------------------
+
+def test_outro_flask_hangs_off_the_end_of_the_spine(page: Page, live_server: str):
+    """The spine, the falling stream and the flask's mouth are three separately
+    positioned things that only read as one pour if they share an x. Nothing in
+    the DOM says so -- only the geometry does."""
+    _open(page, live_server)
+
+    x = page.evaluate(
+        """() => {
+            const tl = document.querySelector('.work-timeline');
+            const outro = document.querySelector('.work-outro');
+            const rim = document.querySelector('.work-outro .flask__rim');
+            const spine = getComputedStyle(tl, '::before');
+            const drip = getComputedStyle(outro, '::before');
+            const rb = rim.getBoundingClientRect();
+            return {
+                spine: tl.getBoundingClientRect().x + parseFloat(spine.left) + parseFloat(spine.width) / 2,
+                drip: outro.getBoundingClientRect().x + parseFloat(drip.left) + parseFloat(drip.width) / 2,
+                rim: rb.x + rb.width / 2,
+            };
+        }"""
+    )
+    assert x["drip"] == pytest.approx(x["spine"], abs=1.5), x
+    assert x["rim"] == pytest.approx(x["spine"], abs=1.5), x
+
+
+def test_outro_flask_sits_below_the_last_stage(page: Page, live_server: str):
+    _open(page, live_server)
+    last = page.locator(".work-timeline__stage").last.bounding_box()
+    flask = page.locator(".work-outro .flask").bounding_box()
+    assert flask["y"] >= last["y"] + last["height"] - 1, (flask, last)
+
+
+def test_outro_flask_is_decorative_only(page: Page, live_server: str):
+    """It's brand furniture, not content: hidden from assistive tech and not a
+    link, unlike the projects-page flask."""
+    _open(page, live_server)
+    flask = page.locator(".work-outro .flask")
+    expect(flask).to_have_attribute("aria-hidden", "true")
+    assert page.locator(".work-outro a").count() == 0
+
+
+def test_outro_flask_is_smaller_than_the_hero_flask(page: Page, live_server: str):
+    """It's punctuation, not a second hero -- guards the scale override from
+    being lost (which would silently blow it up to the hero's 3x)."""
+    _open(page, live_server)
+    work_flask = page.locator(".work-outro .flask").bounding_box()
+
+    page.goto(f"{live_server}/index.html")
+    page.add_style_tag(content="*, *::before, *::after { animation: none !important; }")
+    hero_flask = page.locator(".flask-hero .flask").bounding_box()
+
+    assert work_flask["height"] < hero_flask["height"], (work_flask, hero_flask)
+
+
 # --- Geometry ----------------------------------------------------------------
 
 def test_markers_sit_centred_on_the_spine(page: Page, live_server: str):

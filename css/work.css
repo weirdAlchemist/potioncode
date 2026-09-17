@@ -11,9 +11,13 @@
    ========================================================= */
 
 /* Geometry knobs: the marker is centred on the spine by construction,
-   so nudging --spine-x moves both together. */
-.work-timeline {
+   so nudging --spine-x moves both together. It lives on .work-hero rather
+   than on the list because the outro flask below has to line up with the
+   same spine. */
+.work-hero {
   --spine-x: 11px;      /* centre line of the spine, from the list's left edge */
+}
+.work-timeline {
   --marker-d: 22px;     /* marker diameter */
   --gutter: 1.9rem;     /* space between the spine and the stage cards */
 }
@@ -40,14 +44,15 @@
   padding: 0 0 0 calc(var(--spine-x) + var(--gutter));
   position: relative;
 }
-/* The spine. Inset top/bottom so it starts and ends at the first/last
-   marker instead of overshooting past them. */
+/* The spine. Inset at the top so it starts at the first marker rather than
+   overshooting above it; runs to the foot of the list at the bottom, where
+   .work-outro picks it up and carries it into the flask. */
 .work-timeline::before {
   content: "";
   position: absolute;
   left: calc(var(--spine-x) - 1px);
   top: calc(var(--marker-d) / 2);
-  bottom: calc(var(--marker-d) / 2);
+  bottom: 0;
   width: 2px;
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
   opacity: .5;
@@ -172,6 +177,44 @@
 }
 .work-timeline__musing em { color: var(--accent-2); font-style: italic; }
 
+/* ---------- Outro: the spine drains into the flask ---------- */
+/* flask.css is untouched. Everything below either positions the stage or
+   overrides the flask's own staging tokens (its documented "retune from one
+   place" knobs), scoped to .work-outro so the hero flask is unaffected. The
+   scale is deliberately well under the hero's 3x: this is punctuation. */
+.work-outro {
+  --flask-scale: 1.75;
+  --flask-stage-w: 130px;
+  --flask-stage-h: 150px;
+  --flask-glow-size: 128px;
+  --drip-h: 2.75rem;    /* how far the potion falls before it reaches the rim */
+
+  position: relative;
+  max-width: 720px;     /* same box as .work-timeline, so both share a left edge */
+  margin: 0 auto;
+  padding-top: var(--drip-h);
+  /* Keep the flask off the footer — the glow needs room to fall off. */
+  padding-bottom: clamp(1.5rem, 4vw, 3rem);
+}
+/* The falling stream. Emerald at the top to continue the spine it grows out
+   of, violet at the bottom to meet the potion it lands in. Overshoots the
+   rim by a few px so the join sits inside the flask's mouth, not above it. */
+.work-outro::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--spine-x) - 1px);
+  top: 0;
+  height: calc(var(--drip-h) + 14px);
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent-2), var(--flask-liquid-top));
+  opacity: .5;
+  border-radius: 2px;
+}
+/* Centre the stage — and with it the flask's mouth — on the spine. */
+.work-outro .flask-stage {
+  margin-left: calc(var(--spine-x) - var(--flask-stage-w) / 2);
+}
+
 /* ---------- Narrow screens ---------- */
 @media (max-width: 600px) {
   .work-timeline {
@@ -181,4 +224,13 @@
   .work-timeline__head { gap: .35rem .6rem; }
   /* Let the badge sit under the company name rather than squeezing it. */
   .work-timeline__years { margin-left: 0; }
+
+  /* Smaller again, so the stage's left half still clears the viewport edge. */
+  .work-outro {
+    --flask-scale: 1.4;
+    --flask-stage-w: 106px;
+    --flask-stage-h: 124px;
+    --flask-glow-size: 104px;
+    --drip-h: 2.25rem;
+  }
 }

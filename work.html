@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="css/variables.css" />
   <!-- Custom theme on top of Materialize -->
   <link rel="stylesheet" href="css/styles.css" />
+  <!-- The central potion flask (brand centerpiece) — reused as the timeline's outro -->
+  <link rel="stylesheet" href="css/flask.css" />
   <!-- Work-page-only layout (career timeline) -->
   <link rel="stylesheet" href="css/work.css" />
   <!-- Favicon: vector flask in the brand colours — keep in sync with index.html. -->
@@ -113,6 +115,33 @@
           </li>
 
         </ol>
+
+        <!-- The spine drains off the end of the timeline and into the flask:
+             everything above collects into the potion, still fizzing. The
+             .flask markup is copied from index.html verbatim (the fizz rules
+             are :nth-child based, so the child order matters) and flask.css is
+             untouched — only the staging tokens are overridden, scoped to
+             .work-outro, so it lands as punctuation rather than a second hero. -->
+        <div class="work-outro will-animate" data-anim="animate__fadeIn">
+          <div class="flask-stage">
+            <div class="flask" aria-hidden="true">
+              <div class="flask__body">
+                <span class="flask__shine"></span>
+                <div class="flask__liquid">
+                  <span class="flask__bubble"></span>
+                  <span class="flask__bubble"></span>
+                  <span class="flask__bubble"></span>
+                  <span class="flask__bubble"></span>
+                  <span class="flask__bubble"></span>
+                </div>
+              </div>
+              <span class="flask__rim"></span>
+              <span class="flask__fizz"></span>
+              <span class="flask__fizz"></span>
+              <span class="flask__fizz"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   </main>
