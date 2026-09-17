@@ -111,3 +111,9 @@ When the user says **deploy**, run this sequence — no need to ask for the step
 5. `git checkout develop` — always end back on the dev branch.
 
 Day-to-day work happens on `develop`; `main` only ever fast-forwards to it.
+
+**The push to `origin/main` is the actual deploy.** The webserver has a git hook on
+`origin/main` commits, so anything pushed there goes live immediately — there is no
+separate publish step and no staging in between. Treat step 4 as irreversible-ish:
+tests must be green and the change must be one the user has asked for before `main`
+gets pushed. Pushing `develop` alone is safe and changes nothing on the live site.
