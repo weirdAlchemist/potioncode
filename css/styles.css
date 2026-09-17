@@ -272,18 +272,28 @@ main { position: relative; }
   border-radius: 0 0 12px 12px;
   transition: color .2s, border-color .2s, background .2s;
 }
-.pagenav__item:hover,
-.pagenav__item:focus-visible {
+/* Scoped to `a` so the non-link tabs (current page, disabled) don't light up
+   under the cursor — :hover applies to spans just as happily. */
+a.pagenav__item:hover,
+a.pagenav__item:focus-visible {
   color: var(--accent);
   border-color: var(--accent);
   background: var(--bg-soft);
 }
-.pagenav__item:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+a.pagenav__item:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 /* The page you're already on: accent text, not a link. */
 .pagenav__item--current {
   color: var(--accent);
   border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
   box-shadow: 0 6px 18px -10px var(--accent);
+  cursor: default;
+}
+/* A page that exists but isn't ready to be shown: the tab keeps its place in
+   the row so the switcher doesn't reflow when it's turned back on, but it
+   doesn't link anywhere. */
+.pagenav__item--disabled {
+  color: var(--text-dim);
+  opacity: .5;
   cursor: default;
 }
 

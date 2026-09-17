@@ -24,6 +24,11 @@ PAGES = [
 ORDER = ["Projects", "Main", "Work"]
 HREFS = {"Projects": "projects.html", "Main": "index.html", "Work": "work.html"}
 
+# projects.html exists but isn't ready to be shown, so its tab is present but
+# doesn't link anywhere. Drop this (and re-point the tab at projects.html) when
+# the page goes live.
+DISABLED = "Projects"
+
 
 def _open(page: Page, live_server: str, path: str) -> None:
     page.goto(f"{live_server}/{path}")
@@ -64,12 +69,45 @@ def test_current_page_tab_is_accented_and_not_a_link(page: Page, live_server: st
 def test_other_tabs_link_to_their_pages_and_are_clickable(page: Page, live_server: str, path, current):
     _open(page, live_server, path)
     for label in ORDER:
-        if label == current:
+        if label in (current, DISABLED):
             continue
         tab = page.locator(f".pagenav__item[href='{HREFS[label]}']")
         expect(tab).to_have_text(label)
         # Full hit-test without navigating: fails if anything covers the tab.
         tab.click(trial=True)
+
+
+@pytest.mark.parametrize("path, current", PAGES)
+def test_disabled_tab_is_shown_but_leads_nowhere(page: Page, live_server: str, path, current):
+    """The Projects tab holds its place in the row -- so the switcher doesn't
+    reflow when the page is turned back on -- without being reachable. On
+    projects.html itself the tab is the current one instead, not disabled.
+    """
+    _open(page, live_server, path)
+    tab = page.locator(".pagenav__item", has_text=DISABLED).first
+    expect(tab).to_be_visible()
+
+    if current == DISABLED:
+        expect(tab).to_have_attribute("aria-current", "page")
+        return
+
+    assert tab.evaluate("e => e.tagName") == "SPAN", f"{DISABLED} is still a link on {path}"
+    expect(tab).to_have_attribute("aria-disabled", "true")
+    # Nothing anywhere on the page points at the hidden page.
+    assert page.locator(f"a[href='{HREFS[DISABLED]}']").count() == 0
+
+
+@pytest.mark.parametrize("path, current", PAGES)
+def test_non_link_tabs_do_not_react_to_hover(page: Page, live_server: str, path, current):
+    """:hover applies to spans too, so the hover rule is scoped to `a` -- a
+    dead tab that lights up under the cursor reads as clickable."""
+    _open(page, live_server, path)
+    for tab in page.locator(".pagenav__item:not(a)").all():
+        before = tab.evaluate("e => getComputedStyle(e).backgroundColor")
+        tab.hover()
+        page.wait_for_timeout(50)
+        after = tab.evaluate("e => getComputedStyle(e).backgroundColor")
+        assert before == after, (tab.inner_text(), before, after)
 
 
 def test_clicking_a_tab_navigates(page: Page, live_server: str):

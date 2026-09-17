@@ -50,7 +50,8 @@
        only the highlighted one changes. A div rather than a <nav>: Materialize
        styles the bare `nav` element, which would fight these tabs. -->
   <div class="pagenav" role="navigation" aria-label="Pages">
-    <a class="pagenav__item" href="projects.html">Projects</a>
+    <!-- Projects isn't ready to show yet: tab stays, link doesn't. -->
+    <span class="pagenav__item pagenav__item--disabled" aria-disabled="true">Projects</span>
     <a class="pagenav__item" href="index.html">Main</a>
     <span class="pagenav__item pagenav__item--current" aria-current="page">Work</span>
   </div>
